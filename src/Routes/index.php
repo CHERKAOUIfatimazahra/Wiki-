@@ -1,12 +1,13 @@
 <?php
 
-use App\Controllers\HomeController;
-use App\Router;
+use MVC\Controller\UserController;
+use MVC\Controller\HomeController;
+use MVC\Router;
 
 $router = new Router();
 
-// $router->get('/', HomeController::class, 'index');
-// $router->get('/user', HomeController::class, 'user');
-// $router->post('/insert', HomeController::class, 'insert');
+$router->get('/', HomeController::class, 'index');
+$router->get('/user', HomeController::class, 'user');
+$router->post('/controller/add', UserController::class, 'add');
 
 $router->dispatch();

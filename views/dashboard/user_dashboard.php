@@ -106,16 +106,17 @@
             <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
             add users
             </button>
-
                 <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
+        <form action="controller/add" method="POST">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">add Auteur</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                     <div class="modal-body">
+
                         <div class="form-outline mb-2">
                             <label class="form-label" for="formName">Auteur</label>
                             <input type="text" id="username" name="username" class="form-control form-control-lg">
@@ -138,14 +139,17 @@
                             <label class="form-label" for="form3Example4cg">Password</label>
                             <input type="password" id="password" name="password" class="form-control form-control-lg">
                         </div>
+
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
+        </form>
                 </div>
             </div>
             </div>
+    
             <!-- end add auteur -->
 
                 <!-- html + php -->
