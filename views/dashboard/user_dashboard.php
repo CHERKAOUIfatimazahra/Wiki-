@@ -28,9 +28,9 @@
         </div>
         <div class="menu-items">
         <ul class="nav-links">
-                <li><a href="dashboard.php">
+                <li><a href="user_dashboard.php">
                     <i class="uil uil-estate"></i>
-                    <span class="link-name">Dahsboard</span>
+                    <span class="link-name">users</span>
                 </a></li>
                 <li><a href="wiki.php">
                     <i class="uil uil-files-landscapes"></i>
@@ -109,7 +109,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-        <form action="controller/add" method="POST">
+        <form action="/add" method="POST">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">add Auteur</h1>
@@ -143,7 +143,7 @@
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" onclick="add_user()" class="btn btn-primary">Save changes</button>
                 </div>
         </form>
                 </div>
