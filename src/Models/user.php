@@ -6,7 +6,7 @@ use MVC\connexion\connexion;
 use MVC\interfaces\Crud as CrudInterface;
 use MVC\Model\Crud as CrudAlias;
 use PDO;
-
+ 
 class User extends CrudAlias
 {
    private int $id;
@@ -17,6 +17,7 @@ class User extends CrudAlias
    
    public function __construct(string $username="",string $email="",string $password="",int $roleID=0,int $id=0)
    {
+     parent::__construct();
      $this->username = $username;
      $this->email = $email;
      $this->password = $password;

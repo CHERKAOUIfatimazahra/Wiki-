@@ -1,7 +1,7 @@
 <?php
 
-namespace MVC\Controller;
-use MVC\Controller\Controller;
+namespace App\Controller;
+// use App\Controller\Controller;
 class HomeController 
 {
     

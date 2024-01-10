@@ -11,24 +11,20 @@ class WikiController extends Controller
     {
         
     }
-
     function create(): void
     {
         
     }
-
     function destroy($wikiID): void
     {
         $wiki = new Wiki;
         $wiki->setWikiID($wikiID);
         $wiki->destroy();
     }
-
     function update(int $wikiID): void
     {
 
     }
-
     function wiki(): void
     {
         $wiki = new Wiki;

@@ -1,9 +1,9 @@
 <?php
 
-namespace MVC\Controller;
+namespace App\Controller;
 
-use MVC\Controller;
-use MVC\Model\User;
+use App\Controller;
+use App\Model\User;
 
 class UserController extends Controller
 {
@@ -15,6 +15,7 @@ class UserController extends Controller
     }
     public function add(): void
     {
+        var_dump("test");die(); 
             $name = isset($_POST["username"]) ? $_POST["username"] : "";
             $email = isset($_POST["email"]) ? $_POST["email"] : "";
             $password = isset($_POST["password"]) ? $_POST["password"] : "";

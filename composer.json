@@ -2,7 +2,7 @@
     "name": "youcode/wiki_project",
     "autoload": {
         "psr-4": {
-            "MVC\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
@@ -11,5 +11,7 @@
             "email": "cherkaoui.fatimazahra97@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
 }

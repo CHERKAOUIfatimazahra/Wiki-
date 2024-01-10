@@ -30,6 +30,7 @@
                     <h1 class="text-center pt-3">Create Account<br> Now</h1>
                     <img src="../public/assets/images/wiki.png" alt="wiki" style="position: absolute; left: 40px;">
                 </div>
+      <form action="" method="POST">
                 <div class="col-md-6 bg-dark">
                     <form action="#" class="p-4 text-white">
                     <div class="form-group">
@@ -56,6 +57,7 @@
                     <button type="submit" class="btn btn-warning mb-3 mt-3 float-right">Register</button>
                     </form>
                 </div>
+      </form>
             </div>
         </div>
     </div>
