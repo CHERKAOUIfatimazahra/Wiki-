@@ -12,7 +12,6 @@ use PDO;
     
         public function __construct()
         {
-            // Assuming you have a Database class that provides a PDO connection
             $this->db = Database::getInstance()->getConnection();
         }
     
@@ -44,7 +43,6 @@ use PDO;
                 $stmt->execute([$data['name']]);
                 return true;
             } catch (\PDOException $e) {
-                // Handle the exception (log, throw, or handle gracefully)
                 die("Error: " . $e->getMessage());
             }
         }

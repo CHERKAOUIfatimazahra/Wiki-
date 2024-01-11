@@ -22,7 +22,7 @@ class CategoryController extends Controller
             $category = new Category();
             $category->addCategory($data);
 
-            header("Refresh:0; url=dashboard/category"); // Redirect to the category page
+            header("Refresh:0; url=dashboard/category"); 
         } else {
             // Handle non-POST requests or redirect accordingly
         }

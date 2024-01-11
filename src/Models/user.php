@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use PDO;
 
 class User
@@ -10,7 +9,6 @@ class User
 
     public function __construct()
     {
-        // Assuming you have a Database class that provides a PDO connection
         $this->db = Database::getInstance()->getConnection();
     }
 
@@ -26,7 +24,7 @@ class User
 
             return $users;
         } catch (\PDOException $e) {
-            // Handle the exception (log, throw, or handle gracefully)
+            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
@@ -51,7 +49,7 @@ class User
 
             return $user;
         } catch (\PDOException $e) {
-            // Handle the exception (log, throw, or handle gracefully)
+            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
@@ -62,12 +60,12 @@ class User
             // Prepare and execute the SQL query to update a user by ID
             $query = "UPDATE users SET name = ?, email = ?, password = ?, role = ? WHERE id = ?";
             $statement = $this->db->prepare($query);
-            $data[] = $id; // Add the ID to the end of the array
+            $data[] = $id;
             $statement->execute($data);
 
             return $statement;
         } catch (\PDOException $e) {
-            // Handle the exception (log, throw, or handle gracefully)
+            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
@@ -82,10 +80,12 @@ class User
 
             return $statement;
         } catch (\PDOException $e) {
-            // Handle the exception (log, throw, or handle gracefully)
+            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
+
+// login , register and logout
      public function login($email ,$password) {
         
           $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");

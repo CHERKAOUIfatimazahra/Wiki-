@@ -38,6 +38,12 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/edit_category/{id}', CategoryController::class, 'edit');
     $router->post('/update_category/{id}', CategoryController::class, 'update');
     $router->get('/delete_category/{id}', CategoryController::class, 'destroy');
+
+    // Tag routes
+    $router->post('/add_tag', TagController::class, 'add');
+    $router->get('/edit_tag/{id}', TagController::class, 'edit');
+    $router->post('/update_tag/{id}', TagController::class, 'update');
+    $router->get('/delete_tag/{id}', TagController::class, 'destroy');
     
 } else {
     $router->get('/login', AuthController::class, 'login_url');

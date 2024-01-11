@@ -10,7 +10,6 @@ class Tag
 
     public function __construct()
     {
-        // Assuming you have a Database class that provides a PDO connection
         $this->db = Database::getInstance()->getConnection();
     }
 
@@ -23,7 +22,7 @@ class Tag
         $stmt->execute([$data['tagName']]);
         return true;
     } catch (\PDOException $e) {
-        // Handle the exception (log, throw, or handle gracefully)
+        // Handle the exception
         die("Error: " . $e->getMessage());
     }
 }
@@ -65,7 +64,7 @@ class Tag
             die("Error: " . $e->getMessage());
         }
     }
-    public function deleteTag($tagID): bool  // Add this method
+    public function deleteTag($tagID): bool
     {
         try {
             // Prepare and execute the SQL query to delete a tag by ID

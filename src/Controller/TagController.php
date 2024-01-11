@@ -11,13 +11,13 @@ class TagController extends Controller
     {
         $tag = new Tag();
         $tags = $tag->showAllTags();
-        $this->render('dashboard/tag_dashboard', ['tags' => $tags]);
+        $this->render('dashboard/tag', ['tags' => $tags]);
     }
 
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Assuming your form fields are named appropriately
+            
             $tagName = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
             $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
             $data = [$tagName, $tagID];
@@ -25,7 +25,7 @@ class TagController extends Controller
             $tag = new Tag();
             $tag->addTag($data);
 
-            header("Refresh:0; url=dashboard/tag"); // Adjust the URL as needed
+            header("Refresh:0; url=dashboard/tag"); 
         } else {
             // Handle non-POST requests or redirect accordingly
         }
@@ -34,7 +34,7 @@ class TagController extends Controller
     public function edit($id): void
     {
         $tag = new Tag();
-        $tagData = $tag->find($id);
+        $tagData = $tag->showTag($id);
 
         if (!$tagData) {
             // Handle case where tag with given $id is not found
@@ -53,9 +53,9 @@ class TagController extends Controller
             $data = [$tagName, $tagID];
 
             $tag = new Tag();
-            $tag->editTag($id, $data);  // Change updateTag to editTag
+            $tag->editTag($id, $data);  
 
-            header("Refresh:0; url=dashboard/tag"); // Adjust the URL as needed
+            header("Refresh:0; url=dashboard/tag"); 
         } else {
             // Handle non-POST requests or redirect accordingly
         }
@@ -64,8 +64,8 @@ class TagController extends Controller
     public function destroy($id): void
     {
         $tag = new Tag();
-        $tag->deleteTag($id);   // Add this line to call deleteTag method
+        $tag->deleteTag($id);  
 
-        header("Refresh:0; url=dashboard/tag"); // Adjust the URL as needed
+        header("Refresh:0; url=dashboard/tag"); 
     }
 }
