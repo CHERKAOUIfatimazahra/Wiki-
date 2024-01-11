@@ -63,6 +63,7 @@
 
                 <!-- html + php -->
             <table id="example" class="table table-striped" style="width:100%">
+
                 <thead>
                     <tr class="table table-dark">
                         <th></th>
@@ -78,6 +79,7 @@
                         <td></td>
                     </tr>
                 </tbody>
+                
             </table>
         </div> 
     </div>

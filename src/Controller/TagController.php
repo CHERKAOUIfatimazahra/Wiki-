@@ -3,51 +3,69 @@
 namespace App\Controller;
 
 use App\Controller;
-use App\Model\Tags;
+use App\Models\Tag;
 
 class TagController extends Controller
 {
-    function index(): void
+    public function index(): void
     {
-        $this->render("/dashboard/tag");
-    }
-    function create(): void
-    {
-        
-    }
-    function destroy($wikiID): void
-    {
-        $wiki = new Wiki;
-        $wiki->setWikiID($wikiID);
-        $wiki->destroy();
-    }
-    function update(int $wikiID): void
-    {
-
-    }
-    function wiki(): void
-    {
-        $wiki = new Wiki;
-        $wikis = $wiki->showAll();
+        $tag = new Tag();
+        $tags = $tag->showAllTags();
+        $this->render('dashboard/tag_dashboard', ['tags' => $tags]);
     }
 
-    function add(): void
+    public function add(): void
     {
-        $wiki = new Wiki($_POST['title'], $_POST['content'], $_POST['categoryID'], $_POST['tagID'], $_POST['creationDate']);
-        $wiki->add_wiki();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Assuming your form fields are named appropriately
+            $tagName = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
+            $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
+            $data = [$tagName, $tagID];
+
+            $tag = new Tag();
+            $tag->addTag($data);
+
+            header("Refresh:0; url=dashboard/tag"); // Adjust the URL as needed
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
     }
 
-    public function edit($wikiID): void
+    public function edit($id): void
     {
-        $wiki = new Wiki();
-        $wiki->setWikiID($wikiID);
-        $wikiData = $wiki->show();
+        $tag = new Tag();
+        $tagData = $tag->find($id);
+
+        if (!$tagData) {
+            // Handle case where tag with given $id is not found
+            // You may redirect or display an error message
+            return;
+        }
+
+        $this->render('dashboard/edit_tag', ['tag' => $tagData]);
     }
 
-    function updat($wikiID): void
+    public function update($id): void
     {
-        $wiki = new Wiki($_POST['title'], $_POST['content'], $_POST['categoryID'], $_POST['tagID'], $_POST['creationDate']);
-        $wiki->edit(); 
-        $wikis = new Wiki; 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $tagName = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
+            $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
+            $data = [$tagName, $tagID];
+
+            $tag = new Tag();
+            $tag->editTag($id, $data);  // Change updateTag to editTag
+
+            header("Refresh:0; url=dashboard/tag"); // Adjust the URL as needed
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
+    }
+
+    public function destroy($id): void
+    {
+        $tag = new Tag();
+        $tag->deleteTag($id);   // Add this line to call deleteTag method
+
+        header("Refresh:0; url=dashboard/tag"); // Adjust the URL as needed
     }
 }

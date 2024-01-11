@@ -1,40 +1,80 @@
 <?php
 
-namespace MVC\Model;
+namespace App\Models;
 
-use MVC\connexion\connexion;
-use MVC\interfaces\Crud as CrudInterface;
 use PDO;
 
 class Tag
 {
-    private int $tagID;
-    private string $tagName;
+    private $db;
 
-public function __construct(string $tagName, int $tagID)
-{
-    $this->tagID = $tagID;
-    $this->tagName = $tagName;
-}
-public function getTagID():int
-{
-    return $this->tagID;
-}
-public function setTagID(int $tagID)
-{
-    $this->tagID = $tagID;
-}
-public function getTagName():string
-{
-    return $this->tagName;
-}
-public function setTagName(string $tagName)
-{
-    $this->tagName = $tagName;
-}
-public function add_tag(){}
-public function show(){}
-public function showAllTags(){}
-public function edit(){}
+    public function __construct()
+    {
+        // Assuming you have a Database class that provides a PDO connection
+        $this->db = Database::getInstance()->getConnection();
+    }
 
+    public function addTag($data): bool
+{
+    try {
+        // Prepare and execute the SQL query to add a tag
+        $query = "INSERT INTO tag (tagName) VALUES (?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['tagName']]);
+        return true;
+    } catch (\PDOException $e) {
+        // Handle the exception (log, throw, or handle gracefully)
+        die("Error: " . $e->getMessage());
+    }
+}
+
+    public function showTag($tagID): array
+    {
+        try {
+            // Prepare and execute the SQL query to select a tag by ID
+            $query = "SELECT * FROM tag WHERE tagID = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$tagID]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public function showAllTags(): array
+    {
+        try {
+            // Prepare and execute the SQL query to select all tags
+            $query = "SELECT * FROM tag";
+            $stmt = $this->db->query($query);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public function editTag($tagID, $data): bool
+    {
+        try {
+            // Prepare and execute the SQL query to edit a tag by ID
+            $query = "UPDATE tag SET tagName = ? WHERE tagID = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$data['tagName'], $tagID]);
+            return true;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+    public function deleteTag($tagID): bool  // Add this method
+    {
+        try {
+            // Prepare and execute the SQL query to delete a tag by ID
+            $query = "DELETE FROM tag WHERE tagID = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$tagID]);
+            return true;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
 }
