@@ -3,51 +3,77 @@
 namespace App\Controller;
 
 use App\Controller;
-
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    function index(): void
+    public function index(): void
     {
-        $this->render("/dashboard/category");
+        $category = new Category();
+        $categories = $category->showAllCategory();
+        $this->render("/dashboard/category", ['categories' => $categories]);
     }
-    function create(): void
+    public function add(): void
     {
-        
-    }
-    function destroy($wikiID): void
-    {
-        $wiki = new Wiki;
-        $wiki->setWikiID($wikiID);
-        $wiki->destroy();
-    }
-    function update(int $wikiID): void
-    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $categoryName = isset($_POST["category"]) ? $_POST["category"] : "";
+            $data = ['name' => $categoryName];
 
-    }
-    function wiki(): void
-    {
-        $wiki = new Wiki;
-        $wikis = $wiki->showAll();
-    }
+            $category = new Category();
+            $category->addCategory($data);
 
-    function add(): void
-    {
-        $wiki = new Wiki($_POST['title'], $_POST['content'], $_POST['categoryID'], $_POST['tagID'], $_POST['creationDate']);
-        $wiki->add_wiki();
+            header("Refresh:0; url=dashboard/category"); // Redirect to the category page
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
     }
-
-    public function edit($wikiID): void
+    public function create(): void
     {
-        $wiki = new Wiki();
-        $wiki->setWikiID($wikiID);
-        $wikiData = $wiki->show();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = isset($_POST["name"]) ? $_POST["name"] : "";
+
+            $category = new Category();
+            $category->addCategory(['name' => $name]);
+
+            header("Refresh:0; url=dashboard/category");
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
     }
 
-    function updat($wikiID): void
+    public function destroy($categoryID): void
     {
-        $wiki = new Wiki($_POST['title'], $_POST['content'], $_POST['categoryID'], $_POST['tagID'], $_POST['creationDate']);
-        $wiki->edit(); 
-        $wikis = new Wiki; 
+        $category = new Category();
+        $category->deleteCategory($categoryID);
+
+        header("Refresh:0; url=dashboard/category");
+    }
+
+    public function update($categoryID): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = isset($_POST["name"]) ? $_POST["name"] : "";
+
+            $category = new Category();
+            $category->editCategory($categoryID, ['name' => $name]);
+
+            header("Refresh:0; url=dashboard/category");
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
+    }
+
+    public function edit($categoryID): void
+    {
+        $category = new Category();
+        $categoryData = $category->showCategory($categoryID);
+
+        if (!$categoryData) {
+            // Handle case where category with given $categoryID is not found
+            // You may redirect or display an error message
+            return;
+        }
+
+        $this->render('dashboard/edit_category', ['category' => $categoryData]);
     }
 }

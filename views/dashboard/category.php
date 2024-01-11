@@ -40,46 +40,95 @@
 
                 <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Wiki™ categorys</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                    <div class="modal-body">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Wiki™ categorys</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/add_category" method="POST">
                         <div class="form-outline mb-2">
                             <label class="form-label" for="formName">category</label>
-                            <input type="text" id="title" name="title" class="form-control form-control-lg">
+                            <input type="text" id="category" name="category" class="form-control form-control-lg">
                         </div>
-
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" onclick="addCategory()" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                     </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
-                </div>
-            </div>
-            </div>
+            </div> 
             <!-- end add auteur -->
 
                 <!-- html + php -->
-            <table id="example" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr class="table table-dark">
-                        <th></th>
-                        <th>categorys</th>
-                        <th>option</th>
-                    </tr>
-                </thead>
+                <table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr class="table table-dark">
+            <th></th>
+            <th>categorys</th>
+            <th>options</th>
+        </tr>
+    </thead>
 
-                <tbody>
-                    <tr>
-                        <th></th>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+    <tbody>
+        <?php foreach ($categories as $category) : ?>
+            <tr>
+                <td></td>
+                <td><?= $category['categoryName'] ?></td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $category['categoryID'] ?>">Edit</button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $category['categoryID'] ?>">Delete</button>
+                </td>
+            </tr>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModal<?= $category['categoryID'] ?>" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="/update_category/<?= $category['categoryID'] ?>" method="POST">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="editModalLabel">Edit Category</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Pre-fill the existing category data in the form -->
+                                <div class="form-outline mb-2">
+                                    <label class="form-label" for="formName">Category Name</label>
+                                    <input type="text" id="categoryName" name="categoryName" class="form-control form-control-lg" value="<?= $category['categoryName'] ?>">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal<?= $category['categoryID'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete the category <?= $category['categoryName'] ?>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a href="/delete_category/<?= $category['categoryID'] ?>" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php endforeach ?>
+    </tbody>
+</table>
         </div> 
     </div>
 </section>
