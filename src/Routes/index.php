@@ -31,6 +31,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/edit_user/{id}', UserController::class, 'edit');
     $router->post('/update_user/{id}', UserController::class, 'update');
     $router->get('/delete_user/{id}', UserController::class, 'destroy');
+    
 } else {
     $router->get('/login', AuthController::class, 'login_url');
 }

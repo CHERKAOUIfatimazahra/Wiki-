@@ -17,7 +17,7 @@ class UserController extends Controller
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = isset($_POST["username"]) ? $_POST["username"] : "";
+            $name = isset($_POST["name"]) ? $_POST["name"] : "";
             $email = isset($_POST["email"]) ? $_POST["email"] : "";
             $password = isset($_POST["password"]) ? $_POST["password"] : "";
             $role = isset($_POST["role"]) ? $_POST["role"] : "";
@@ -49,7 +49,7 @@ class UserController extends Controller
     public function update($id): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = isset($_POST["username"]) ? $_POST["username"] : "";
+            $name = isset($_POST["name"]) ? $_POST["name"] : "";
             $email = isset($_POST["email"]) ? $_POST["email"] : "";
             $password = isset($_POST["password"]) ? $_POST["password"] : "";
             $role = isset($_POST["role"]) ? $_POST["role"] : "";

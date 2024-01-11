@@ -78,7 +78,7 @@
 
                                 <div class="form-outline mb-2">
                                     <label class="form-label" for="formName">Auteur</label>
-                                    <input type="text" id="username" name="name" class="form-control form-control-lg">
+                                    <input type="text" id="name" name="name" class="form-control form-control-lg">
                                 </div>
 
                                 <div class="form-outline mb-2">
@@ -112,7 +112,6 @@
 
         <!-- end add auteur -->
 
-        <!-- html + php -->
         <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr class="table table-dark">
@@ -131,10 +130,11 @@
                                 <td><?= $user['email'] ?></td>
                                 <td><?= $user['role'] ?></td>
                                 <td>
-                                    <a href="/edit_user/<?= $user['id'] ?>" class="btn btn-info btn-sm">Edit</a>
                                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $user['id'] ?>">Delete</button>
-                                </td>
-                            </tr>
+                                <!-- Update Modal Button -->
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal<?= $user['id'] ?>">Update</button>
+                </td>
+            </tr>
 
                             <!-- Delete Modal -->
                             <div class="modal fade" id="deleteModal<?= $user['id'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -154,9 +154,47 @@
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
+
+                        <!-- Update Modal -->
+            <div class="modal fade" id="updateModal<?= $user['id'] ?>" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="/update_user/<?= $user['id'] ?>" method="POST">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Update User</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Pre-fill the existing user data in the form -->
+                                <div class="form-outline mb-2">
+                                    <label class="form-label" for="formName<?= $user['id'] ?>">Name</label>
+                                    <input type="text" id="username<?= $user['id'] ?>" name="name" class="form-control form-control-lg" value="<?= $user['name'] ?>">
+                                </div>
+
+                                <div class="form-outline mb-2">
+                                    <label class="form-label" for="form3Example3cg<?= $user['id'] ?>">Email</label>
+                                    <input type="email" id="email<?= $user['id'] ?>" name="email" class="form-control form-control-lg" value="<?= $user['email'] ?>">
+                                </div>
+
+                                <div class="form-outline mb-2">
+                                    <label class="form-label" for="form3Example1cg<?= $user['id'] ?>">Role</label>
+                                    <select name="role" class="form-control form-control-lg" id="role<?= $user['id'] ?>">
+                                        <option value="2" <?= ($user['role'] == 2) ? 'selected' : '' ?>>Auteur</option>
+                                        <option value="1" <?= ($user['role'] == 1) ? 'selected' : '' ?>>Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </tbody>
+</table>
             </div>
         <?php elseif ($_SESSION['role'] == 2) : ?>
             <div class="dash-content mt-5">

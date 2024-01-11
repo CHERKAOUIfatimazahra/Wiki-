@@ -5,12 +5,12 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
-						<a class="nav-link active" href="home.php">Home</a>
+						<a class="nav-link active" href="/home">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="login.php">Sign In</a>
+						<a class="nav-link" href="/login">Sign In</a>
 					</li>
-					<a href="register.php">
+					<a href="/register">
   						<button type="button" class="btn btn-dark ms-3">Get Started</button>
 					</a>
 				</ul>
