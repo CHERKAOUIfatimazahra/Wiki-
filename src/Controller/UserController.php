@@ -3,42 +3,72 @@
 namespace App\Controller;
 
 use App\Controller;
-use App\Model\User;
+use App\Models\User;
 
 class UserController extends Controller
 {
     public function getAllUser()
     {
-        $user = new User;
+        $user = new User();
         $users = $user->showAll();
-        $this->render('dashboard',['user' => $users]);
+        $this->render('dashboard/user_dashboard', ['users' => $users]);
     }
+
     public function add(): void
     {
-        var_dump("test");die(); 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = isset($_POST["username"]) ? $_POST["username"] : "";
             $email = isset($_POST["email"]) ? $_POST["email"] : "";
             $password = isset($_POST["password"]) ? $_POST["password"] : "";
             $role = isset($_POST["role"]) ? $_POST["role"] : "";
+            $data = [$name, $email, $password, $role];
 
-            return $this->render('user', ['username' => $name]);
+            $user = new User();
+            $user->create($data);
+
+            header("Refresh:0; url=dashboard");
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
     }
+
     public function edit($id): void
     {
         $user = new User();
-        $user->setId($id);
-        $userData = $user->show();
+        $userData = $user->find($id);
+
+        if (!$userData) {
+            // Handle case where user with given $id is not found
+            // You may redirect or display an error message
+            return;
+        }
+
+        $this->render('dashboard/edit_user', ['user' => $userData]);
     }
+
     public function update($id): void
     {
-        $user = new User($_POST['username'], $_POST['email'], $_POST['password'], $_POST['roleID']);
-        $user->edit(); 
-        $user = new User; 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = isset($_POST["username"]) ? $_POST["username"] : "";
+            $email = isset($_POST["email"]) ? $_POST["email"] : "";
+            $password = isset($_POST["password"]) ? $_POST["password"] : "";
+            $role = isset($_POST["role"]) ? $_POST["role"] : "";
+            $data = [$name, $email, $password, $role];
+
+            $user = new User();
+            $user->update($id, $data);
+
+            header("Refresh:0; url=dashboard");
+        } else {
+            // Handle non-POST requests or redirect accordingly
+        }
     }
+
     public function destroy($id): void
     {
-        $user = new User;
-        $user->setId($id);
-        $user->destroy();
+        $user = new User();
+        $user->delete($id);
+
+        header("Refresh:0; url=dashboard");
     }
 }

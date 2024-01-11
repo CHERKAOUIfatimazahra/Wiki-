@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!----======== CSS ======== -->
-    <link rel="stylesheet" href="../../public/assets/styles/dashboard.css">
+    <link rel="stylesheet" href="/assets/styles/dashboard.css">
      
     <!----===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -19,51 +19,7 @@
     <title>Admin Dashboard Wiki™</title>
 </head>
 <body>
-    <nav>
-        <div class="logo-name">
-            <div class="logo-image">
-               <img src="../../public/assets/images/wiki.png" alt="Wiki™">
-            </div>
-            <span class="logo_name">Wiki™</span>
-        </div>
-        <div class="menu-items">
-            <ul class="nav-links">
-                <li><a href="user_dashboard.php">
-                    <i class="uil uil-estate"></i>
-                    <span class="link-name">Dahsboard</span>
-                </a></li>
-                <li><a href="wiki.php">
-                    <i class="uil uil-files-landscapes"></i>
-                    <span class="link-name">wikis</span>
-                </a></li>
-                <li><a href="category.php">
-                    <i class="uil uil-chart"></i>
-                    <span class="link-name">Category</span>
-                </a></li>
-                <li><a href="tag.php">
-                    <i class="uil uil-chart"></i>
-                    <span class="link-name">Tags</span>
-                </a></li>
-                
-            </ul>
-            
-            <ul class="logout-mode">
-                <li><a href="#">
-                    <i class="uil uil-signout"></i>
-                    <span class="link-name">Logout</span>
-                </a></li>
-                <li class="mode">
-                    <a href="#">
-                        <i class="uil uil-moon"></i>
-                    <span class="link-name">Dark Mode</span>
-                </a>
-                    <div class="mode-toggle">
-                    <span class="switch"></span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+<?php include "../views/partials/sidbar.php" ?> 
 
     <section class="dashboard">
         <div class="top">
@@ -129,7 +85,7 @@
 </section>
 
 <!-- script -->
-    <script src="../../public/assets/js/dashboard.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <!-- end script -->
 </body>

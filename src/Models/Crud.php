@@ -1,12 +1,9 @@
 <?php
 
-namespace MVC\Model;
-
-use MVC\connexion\connexion;
-use MVC\interfaces\Crud as CrudInterface;
+namespace App\Model;
 use PDO;
 
-abstract class Crud implements CrudInterface
+abstract class Crud 
 {
     public function __construct()
     {

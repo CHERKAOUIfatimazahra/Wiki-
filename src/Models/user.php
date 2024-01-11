@@ -1,91 +1,125 @@
 <?php
 
-namespace MVC\Model;
+namespace App\Models;
 
-use MVC\connexion\connexion;
-use MVC\interfaces\Crud as CrudInterface;
-use MVC\Model\Crud as CrudAlias;
 use PDO;
- 
-class User extends CrudAlias
-{
-   private int $id;
-   private string $username;
-   private string $email;
-   private string $password;
-   private int $roleID;
-   
-   public function __construct(string $username="",string $email="",string $password="",int $roleID=0,int $id=0)
-   {
-     parent::__construct();
-     $this->username = $username;
-     $this->email = $email;
-     $this->password = $password;
-     $this->roleID = $roleID;
-     $this->id = $id;
-   }
 
-   public function getUsername():string
-   {
-        return $this->username;
-   }
-   public function setUsername(string $username)
-   {
-        $this->username = $username;
-   }
-   public function getEmail():string
-   {
-        return $this->email;
-   }
-   public function setEmail(string $email)
-   {
-        $this->email = $email;
-   }
-   public function getPassword():string
-   {
-        return $this->password;
-   }
-   public function setPassword(string $password)
-   {
-        $this->password = $password;
-   }
-   public function getRoleID(): int
-   {
-        return $this->roleID;
-   }
-   public function setRoleID(int $roleID)
-   {
-        $this->roleID = $roleID;
-   }
-   public function getId():int
-   {
-        return $this->id;
-   }
-   public function setId(int $id)
-   {
-        $this->id = $id;
-   }
+class User
+{
+    private $db;
 
-//model
-public function edit():void
-{
-    $this->update('user', $this->id, ['username' => $this->username,'email' => $this->email,'password'=> $this->password,'roleID'=>$this->roleID]);
-}
-public function add_user(): void
-{
-    $this->id = $this->insert('user',['username' => $this->username,'email' => $this->email,'password'=> $this->password,'roleID'=>$this->roleID]); 
-}
-public function destroy():void
-{
-    $this->delete('user', $this->id);
-}
-public function show(): object
-{
-    return $this->select('user', $this->id); 
-}
-public function showAll(): array
-{
-    return $this->selectAll('user');
-}
+    public function __construct()
+    {
+        // Assuming you have a Database class that provides a PDO connection
+        $this->db = Database::getInstance()->getConnection();
+    }
 
+    public function showAll()
+    {
+        try {
+            // Prepare and execute the SQL query to select all users
+            $query = "SELECT * FROM users";
+            $statement = $this->db->query($query);
+
+            // Fetch all users as an associative array
+            $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $users;
+        } catch (\PDOException $e) {
+            // Handle the exception (log, throw, or handle gracefully)
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public function create($data)
+    {
+        $stmt =  $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+        $stmt->execute($data);
+        return $stmt;
+    }
+
+    public function find($id)
+    {
+        try {
+            // Prepare and execute the SQL query to select a user by ID
+            $query = "SELECT * FROM users WHERE id = ?";
+            $statement = $this->db->prepare($query);
+            $statement->execute([$id]);
+
+            // Fetch the user as an associative array
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+            return $user;
+        } catch (\PDOException $e) {
+            // Handle the exception (log, throw, or handle gracefully)
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public function update($id, $data)
+    {
+        try {
+            // Prepare and execute the SQL query to update a user by ID
+            $query = "UPDATE users SET name = ?, email = ?, password = ?, role = ? WHERE id = ?";
+            $statement = $this->db->prepare($query);
+            $data[] = $id; // Add the ID to the end of the array
+            $statement->execute($data);
+
+            return $statement;
+        } catch (\PDOException $e) {
+            // Handle the exception (log, throw, or handle gracefully)
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            // Prepare and execute the SQL query to delete a user by ID
+            $query = "DELETE FROM users WHERE id = ?";
+            $statement = $this->db->prepare($query);
+            $statement->execute([$id]);
+
+            return $statement;
+        } catch (\PDOException $e) {
+            // Handle the exception (log, throw, or handle gracefully)
+            die("Error: " . $e->getMessage());
+        }
+    }
+     public function login($email ,$password) {
+        
+          $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        
+          $stmt->bindValue(1, $email);
+          
+          $stmt->execute();
+          $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+          if ($user && password_verify($password, $user['password'])) {
+              return $user;
+          }
+  
+          return false;
+      
+      }
+      public function register($name, $email, $password, $role)
+      {
+        
+          $passhash = password_hash($password, PASSWORD_DEFAULT);
+      
+          $stmt = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+      
+          $stmt->bindValue(1, $name);
+          $stmt->bindValue(2, $email);
+          $stmt->bindValue(3, $passhash);
+          $stmt->bindValue(4, $role);
+      
+          $result = $stmt->execute();
+      
+          if ($result) {
+              return true;
+          }
+      
+          return false;
+      }
 }

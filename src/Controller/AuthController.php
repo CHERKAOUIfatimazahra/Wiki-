@@ -1,38 +1,67 @@
 <?php
 
-namespace MVC\Controller;
+namespace App\Controller;
 
-use MVC\Controller;
+use App\Controller;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-
-    function index(): void
+    function login_url(): void
     {
-
+        $this->render("login");
     }
-    function create(): void
+    function register_url(): void
     {
-    
-    }
-    function destroy(int $id): void
-    {
-        
-    }
-    function update(int $id): void
-    {
-        
-    }
-    function sign_in(): void
-    {
-        $this->render("");
-    }
-    function register(): void
-    {
-        $this->render("");
+        $this->render("register");
     }
     function profile(): void
     {
         $this->render("");
+    }
+
+    function login(): void
+    {
+
+        $email = isset($_POST["email"]) ? $_POST["email"] : "";
+        $password = isset($_POST["password"]) ? $_POST["password"] : "";
+        $user_model = new User();
+        $user = $user_model->login($email, $password);
+
+        if ($user) {
+
+            $_SESSION['idUser'] = $user['id'];
+            $_SESSION['role'] = $user['role'];
+
+            if ($_SESSION['role'] == 1) {
+                header("Refresh:0; url=/dashboard");
+            } elseif ($_SESSION['role'] == 2) {
+
+                header("Refresh:0; url=/dashboard/wiki");
+            }
+        } else {
+
+
+            $this->render("login", ["error" => "Invalid credentials"]);
+        }
+    }
+    function register(): void
+    {
+        $name = isset($_POST["username"]) ? $_POST["username"] : "";
+        $email = isset($_POST["email"]) ? $_POST["email"] : "";
+        $password = isset($_POST["password"]) ? $_POST["password"] : "";
+
+
+        $user_model = new User();
+        $user = $user_model->register($name, $email, $password, $role = 2);
+
+        header("Refresh:0; url=login");
+    }
+
+    public function logout()
+    {
+        session_destroy();
+
+        header("Refresh:0; url=login");
     }
 }

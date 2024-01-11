@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../public/assets/styles/home.css">
   <link rel="stylesheet" href="../public/assets/styles/navbar.css">
   <link rel="stylesheet" href="../public/assets/styles/footer.css">
-  <script src="../public/assets/js/home.js" defer></script>
+  <script src="/assets/js/home.js" defer></script>
 </head>
 
 <body>

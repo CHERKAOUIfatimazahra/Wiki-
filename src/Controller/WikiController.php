@@ -1,15 +1,15 @@
 <?php
 
-namespace MVC\Controller;
+namespace App\Controller;
 
-use MVC\Controller;
-use MVC\Model\Wiki;
+use App\Controller;
+use App\Model\Wiki;
 
 class WikiController extends Controller
 {
     function index(): void
     {
-        
+        $this->render("/dashboard/wiki");
     }
     function create(): void
     {

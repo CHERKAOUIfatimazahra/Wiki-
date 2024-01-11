@@ -6,20 +6,20 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="../public/assets/styles/bootstrap.min.css" rel="stylesheet">
-    <link href="../public/assets/styles/font-awesome.min.css" rel="stylesheet">
-    <link href="../public/assets/styles/signin.css" rel="stylesheet">
+    <link href="/assets/styles/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/styles/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/styles/signin.css" rel="stylesheet">
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../public/assets/styles/navbar.css">
-    <link rel="stylesheet" href="../public/assets/styles/footer.css">
+    <link rel="stylesheet" href="/assets/styles/navbar.css">
+    <link rel="stylesheet" href="/assets/styles/footer.css">
     <title>login Wiki™</title>
   </head>
   <body>
-<?php include "layout/navbar.php"?>
+
     <section class="form-02-main">
       <div class="container">
         <div class="row">
@@ -27,8 +27,9 @@
             <div class="_lk_de">
               <div class="form-03-main">
                 <div class="logo">
-                  <img src="../public/assets/images/user.png">
+                  <img src="/assets/images/user.png">
                 </div>
+                <form action="/auth_login" method="post">
                 <div class="form-group">
                   <input type="email" name="email" class="form-control _ge_de_ol" type="text" placeholder="Enter Email" required="" aria-required="true">
                 </div>
@@ -38,14 +39,17 @@
                 </div>
 
                 <div class="checkbox form-group">
-                  
-                  <a href="#">Forgot Password</a>
+                 <?php if(isset($error)) : ?> 
+                  <span> <?php echo $error ?> </span> 
+                  <?php endif ?>
+                  <a href="/register">Register</a>
                 </div>
 
                 <div class="form-group">
                   <div class="_btn_04 ">
-                    <a href="#">Login</a>
+                    <button type="submit" >Login</button>
                   </div>
+                  </form>
                 </div>
               </div>
             </div>

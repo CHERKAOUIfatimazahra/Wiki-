@@ -1,5 +1,4 @@
 <?php
-
 namespace App;
 
 class Router
@@ -28,9 +27,14 @@ class Router
             $action = $this->routes[$method][$uri]['action'];
 
             $controller = new $controller();
-            $controller->$action();
+           
+            $controller->$action(); 
+           
         } else {
-            throw new \Exception("No route found for URI: $uri");
+         
+            // throw new \Exception("No route found for URI: $uri");
+            //  ("Refresh:0; url=login");
+             include "../views/error404.php";
         }
     }
 }
