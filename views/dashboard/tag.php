@@ -51,12 +51,12 @@
                             <label class="form-label" for="formName">tags</label>
                             <input type="text" id="tagName" name="tagName" class="form-control form-control-lg">
                         </div>
-
                     </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" onclick="addTags()" class="btn btn-primary">Save changes</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" onclick="addTags()" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
                 </div>
             </div>
             </div>
@@ -79,21 +79,20 @@
                         <td></td>
                         <td><?= $tag['tagName'] ?></td>
                         <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $tag['tagName'] ?>">Edit</button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $tag['tagName'] ?>">Delete</button>
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $tag['tagID'] ?>">Edit</button>
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $tag['tagID'] ?>">Delete</button>
                         </td>
                     </tr>
                      <!-- Edit Modal -->
             <div class="modal fade" id="editModal<?= $tag['tagID'] ?>" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <form action="/update_category/<?= $tag['tagID'] ?>" method="POST">
+                    <form action="/update_tag/<?= $tag['tagID'] ?>" method="POST">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="editModalLabel">Edit Category</h1>
+                                <h1 class="modal-title fs-5" id="editModalLabel">Edit Tag</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <!-- Pre-fill the existing category data in the form -->
                                 <div class="form-outline mb-2">
                                     <label class="form-label" for="formName">Tags</label>
                                     <input type="text" id="tagName" name="tagName" class="form-control form-control-lg" value="<?= $tag['tagName'] ?>">
@@ -113,15 +112,15 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModalLabel">Delete Category</h5>
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Tag</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Are you sure you want to delete the tag <?= $tag['tagName'] ?>?
+                            Are you sure you want to delete <?= $tag['tagName'] ?>?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="/delete_category/<?= $tag['tagID'] ?>" class="btn btn-danger">Delete</a>
+                            <a href="/delete_tag/<?= $tag['tagID'] ?>" class="btn btn-danger">Delete</a>
                         </div>
                     </div>
                 </div>

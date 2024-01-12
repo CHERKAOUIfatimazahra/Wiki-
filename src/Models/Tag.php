@@ -8,21 +8,42 @@ class Tag
 {
     private $db;
 
+    private int $tagID;
+    private string $tagName;
+
     public function __construct()
     {
         $this->db = Database::getInstance()->getConnection();
     }
 
+    public function getTagID(): int
+        {
+            return $this->tagID;
+        }
+    
+        public function setTagID(int $tagID)
+        {
+            $this->tagID = $tagID;
+        }
+    
+        public function getTagName(): string
+        {
+            return $this->tagName;
+        }
+    
+        public function setTagName(string $tagName)
+        {
+            $this->tagName = $tagName;
+        }
     public function addTag($data): bool
 {
-    try {
+    try { 
         // Prepare and execute the SQL query to add a tag
         $query = "INSERT INTO tag (tagName) VALUES (?)";
         $stmt = $this->db->prepare($query);
-        $stmt->execute([$data['tagName']]);
+        $stmt->execute([$data['name']]);
         return true;
     } catch (\PDOException $e) {
-        // Handle the exception
         die("Error: " . $e->getMessage());
     }
 }
@@ -58,7 +79,7 @@ class Tag
             // Prepare and execute the SQL query to edit a tag by ID
             $query = "UPDATE tag SET tagName = ? WHERE tagID = ?";
             $stmt = $this->db->prepare($query);
-            $stmt->execute([$data['tagName'], $tagID]);
+            $stmt->execute([$data['name'], $tagID]);
             return true;
         } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());

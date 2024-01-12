@@ -11,7 +11,7 @@ class TagController extends Controller
     {
         $tag = new Tag();
         $tags = $tag->showAllTags();
-        $this->render('dashboard/tag', ['tags' => $tags]);
+        $this->render('/dashboard/tag', ['tags' => $tags]);
     }
 
     public function add(): void
@@ -20,14 +20,14 @@ class TagController extends Controller
             
             $tagName = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
             $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
-            $data = [$tagName, $tagID];
+            $data = ['name' => $tagName];
 
             $tag = new Tag();
             $tag->addTag($data);
 
             header("Refresh:0; url=dashboard/tag"); 
         } else {
-            // Handle non-POST requests or redirect accordingly
+            // error message
         }
     }
 
@@ -37,8 +37,7 @@ class TagController extends Controller
         $tagData = $tag->showTag($id);
 
         if (!$tagData) {
-            // Handle case where tag with given $id is not found
-            // You may redirect or display an error message
+            // error message
             return;
         }
 
@@ -57,7 +56,7 @@ class TagController extends Controller
 
             header("Refresh:0; url=dashboard/tag"); 
         } else {
-            // Handle non-POST requests or redirect accordingly
+            // error message
         }
     }
 
