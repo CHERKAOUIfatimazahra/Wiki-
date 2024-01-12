@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Controller;
-use App\Model\Wiki;
+use App\Models\Wiki;
 
 class WikiController extends Controller
 {
@@ -17,7 +17,7 @@ class WikiController extends Controller
     }
     function destroy($wikiID): void
     {
-        $wiki = new Wiki;
+        $wiki = new Wiki; 
         $wiki->setWikiID($wikiID);
         $wiki->destroy();
     }

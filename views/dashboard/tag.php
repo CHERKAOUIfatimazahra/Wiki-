@@ -106,7 +106,6 @@
                     </form>
                 </div>
             </div>
-
                         <!-- Delete Modal -->
             <div class="modal fade" id="deleteModal<?= $tag['tagID'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog">

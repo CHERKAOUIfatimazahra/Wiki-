@@ -20,9 +20,7 @@
 </head>
 <body>
 
-<?php 
-
-include "../views/partials/sidbar.php" ?>
+<?php include '../views/partials/sidbar.php'; ?>
     <section class="dashboard">
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
@@ -42,7 +40,7 @@ include "../views/partials/sidbar.php" ?>
 
                 <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <form class="modal-dialog" action="/create_Wiki" method="post">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">add Wiki™</h1>
@@ -61,38 +59,43 @@ include "../views/partials/sidbar.php" ?>
 
                         <div class="form-outline mb-2">
                             <label class="form-label" for="form3Example1cg">category</label>
-                                <select name="category" id="category" class="form-control form-control-lg">
-                                    <option value="spectateur">auteur</option>
-                                    <option value="admin">admin</option>
+                                <select name="categoryID" id="categoryID" class="form-control form-control-lg">
+                                    <option value="" selected>SELECT CATEGORY</option>
+                                <?php foreach ($categories as $category) {
+                                    echo "<option value='{$category['categoryID']}'>{$category['categoryName']}</option>";
+                                } ?>
                                 </select>
                         </div>
 
                         <div class="form-outline mb-2">
                             <label class="form-label" for="form3Example1cg">tags</label>
-                                <select name="category" id="category" class="form-control form-control-lg">
-                                    <option value="spectateur">auteur</option>
-                                    <option value="admin">admin</option>
+                                <select name="tagID" id="tagID" class="form-control form-control-lg">
+                                <option value="" selected>SELECT Tags</option>
+                                <?php foreach ($tags as $tag) {
+                                    echo "<option value='{$tag['tagID']}'>{$tag['tagName']}</option>";
+                                } ?>
                                 </select>
                         </div>
 
                         <div class="form-outline mb-2">
                             <label class="form-label" for="formName">creat date</label>
-                            <input type="date" id="content" name="content" class="form-control form-control-lg">
+                            <input type="date" id="creationDate" name="creationDate" class="form-control form-control-lg">
                         </div>
 
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
                 </div>
-            </div>
+            </form>
             </div>
             <!-- end add auteur -->
 
                 <!-- html + php -->
             <table id="example" class="table table-striped" style="width:100%">
                 <thead>
+                    
                     <tr class="table table-dark">
                         <th></th>
                         <th>wiki</th>
@@ -105,15 +108,16 @@ include "../views/partials/sidbar.php" ?>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <th></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                <?php foreach ($wikis as $wiki):?>
+                                    <tr>
+                                    <th><?php $wiki['title']?></th>
+                                    <td><?php $wiki['content']?></td>
+                                    <td><?php $wiki['categoryID']?></td>
+                                    <td><?php $wiki['tagID']?></td>
+                                    <td><?php $wiki['creationDate']?></td>
+                                    <td><?php $wiki['tagID']?></td>
+                                    </tr>
+                <?php endforeach ?>
                 </tbody>
             </table>
         </div> 

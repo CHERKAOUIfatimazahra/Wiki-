@@ -1,29 +1,24 @@
 <?php
 
-namespace MVC\Model;
+namespace App\Models;
 
-use MVC\connexion\connexion;
-use MVC\interfaces\Crud as CrudInterface;
-use MVC\Model\Crud as CrudAlias;
 use PDO;
 
-class Wiki extends CrudAlias
+class Wiki
 {
+    private $db;
+
     private int $wikiID;
     private string $title;
     private string $content;
     private int $categoryID;
     private int $tagID;
     private string $creationDate;
-public function __construct(string $title="", string $content="", int $categoryID=0, int $tagID=0, string $creationDate="", int $wikiID=0)
-{
-    $this->title = $title;
-    $this->content = $content;
-    $this->categoryID = $categoryID;
-    $this->tagID = $tagID;
-    $this->creationDate = $creationDate;
-    $this->wikiID = $wikiID;
-}
+
+    public function __construct()
+    {
+        $this->db = Database::getInstance()->getConnection();
+    }
 public function getWikiID(): int
 {
     return $this->wikiID;
@@ -64,27 +59,73 @@ public function setCreationDate(string $creationDate)
 {
     $this->creationDate = $creationDate;
 }
-//model
-public function edit():void{
-    $this->update('wiki', $this->wikiID, ['title' => $this->title,'content' => $this->content,'categoryID'=> $this->categoryID,'tagID'=>$this->tagID,'creationDate'=>$this->creationDate]);
-}
-public function add_wiki(): void
+
+public function addWiki($data): bool
 {
-    $this->wikiID = $this->insert('wiki',['title' => $this->title,'content' => $this->content,'categoryID'=> $this->categoryID,'tagID'=>$this->tagID,'creationDate'=>$this->creationDate]); 
+    try { 
+        // Prepare and execute the SQL query to add a tag
+        $query = "INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?,?,?,?,?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(1, $title);
+        $stmt->bindParam(2, $content);
+        $stmt->bindParam(3, $categoryID);
+        $stmt->bindParam(4, $tagID);
+        $stmt->bindParam(5, $creationDate);
+
+        $stmt->execute([$data['name']]);
+        return true;
+    } catch (\PDOException $e) {
+        die("Error: " . $e->getMessage());
+    }
 }
 
-public function destroy():void{
-    $this->delete('wiki', $this->wikiID);
-}
+    // public function showTag($tagID): array
+    // {
+    //     try {
+    //         // Prepare and execute the SQL query to select a tag by ID
+    //         $query = "SELECT * FROM tag WHERE tagID = ?";
+    //         $stmt = $this->db->prepare($query);
+    //         $stmt->execute([$tagID]);
+    //         return $stmt->fetch(PDO::FETCH_ASSOC);
+    //     } catch (\PDOException $e) {
+    //         die("Error: " . $e->getMessage());
+    //     }
+    // }
 
-public function show(): object
-{
-    return $this->select('wiki', $this->wikiID);
-  
-}
-public function showAll(): array
-{
-    return $this->selectAll('wiki');
-}
+    // public function showAllTags(): array
+    // {
+    //     try {
+    //         // Prepare and execute the SQL query to select all tags
+    //         $query = "SELECT * FROM tag";
+    //         $stmt = $this->db->query($query);
+    //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     } catch (\PDOException $e) {
+    //         die("Error: " . $e->getMessage());
+    //     }
+    // }
 
+    // public function editTag($tagID, $data): bool
+    // {
+    //     try {
+    //         // Prepare and execute the SQL query to edit a tag by ID
+    //         $query = "UPDATE tag SET tagName = ? WHERE tagID = ?";
+    //         $stmt = $this->db->prepare($query);
+    //         $stmt->execute([$data['name'], $tagID]);
+    //         return true;
+    //     } catch (\PDOException $e) {
+    //         die("Error: " . $e->getMessage());
+    //     }
+    // }
+    // public function deleteTag($tagID): bool
+    // {
+    //     try {
+    //         // Prepare and execute the SQL query to delete a tag by ID
+    //         $query = "DELETE FROM tag WHERE tagID = ?";
+    //         $stmt = $this->db->prepare($query);
+    //         $stmt->execute([$tagID]);
+    //         return true;
+    //     } catch (\PDOException $e) {
+    //         die("Error: " . $e->getMessage());
+    //     }
+    // }
 }
