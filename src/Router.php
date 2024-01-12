@@ -31,7 +31,6 @@ class Router
             $controller->$action(); 
            
         } else {
-         
             // throw new \Exception("No route found for URI: $uri");
             //  ("Refresh:0; url=login");
              include "../views/error404.php";

@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+
     <title>Admin Dashboard Wiki™</title>
 </head>
 <body>
@@ -40,7 +42,7 @@
 
                 <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <form class="modal-dialog" action="/create_Wiki" method="post">
+            <form class="modal-dialog" action="/add_wiki" method="post">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">add Wiki™</h1>
@@ -69,11 +71,11 @@
 
                         <div class="form-outline mb-2">
                             <label class="form-label" for="form3Example1cg">tags</label>
-                                <select name="tagID" id="tagID" class="form-control form-control-lg">
-                                <option value="" selected>SELECT Tags</option>
-                                <?php foreach ($tags as $tag) {
-                                    echo "<option value='{$tag['tagID']}'>{$tag['tagName']}</option>";
-                                } ?>
+                                <select name="tagID" id="tagID" class="form-control form-control-lg" select name="tags" id="tags" multiple>
+                                    <option value="" selected>SELECT Tags</option>
+                                    <?php foreach ($tags as $tag) {
+                                        echo "<option value='{$tag['tagID']}'>{$tag['tagName']}</option>";
+                                    } ?>
                                 </select>
                         </div>
 
@@ -109,14 +111,14 @@
 
                 <tbody>
                 <?php foreach ($wikis as $wiki):?>
-                                    <tr>
+                                <th scope="row"><?= $wiki['wikiID'] ?></th>>
                                     <th><?php $wiki['title']?></th>
                                     <td><?php $wiki['content']?></td>
                                     <td><?php $wiki['categoryID']?></td>
                                     <td><?php $wiki['tagID']?></td>
                                     <td><?php $wiki['creationDate']?></td>
                                     <td><?php $wiki['tagID']?></td>
-                                    </tr>
+                                </tr>
                 <?php endforeach ?>
                 </tbody>
             </table>
@@ -127,6 +129,10 @@
 <!-- script -->
     <script src="../../public/assets/js/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+        new MultiSelectTag('tags')  // id
+    </script>
 <!-- end script -->
 </body>
 </html>

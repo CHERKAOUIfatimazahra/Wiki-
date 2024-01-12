@@ -59,25 +59,48 @@ public function setCreationDate(string $creationDate)
 {
     $this->creationDate = $creationDate;
 }
+public function showAll()
+    {
+        try {
+            // Prepare and execute the SQL query to select all users
+            $query = "SELECT * FROM wiki";
+            $statement = $this->db->query($query);
 
-public function addWiki($data): bool
-{
-    try { 
-        // Prepare and execute the SQL query to add a tag
-        $query = "INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?,?,?,?,?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(1, $title);
-        $stmt->bindParam(2, $content);
-        $stmt->bindParam(3, $categoryID);
-        $stmt->bindParam(4, $tagID);
-        $stmt->bindParam(5, $creationDate);
+            // Fetch all users as an associative array
+            $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt->execute([$data['name']]);
-        return true;
-    } catch (\PDOException $e) {
-        die("Error: " . $e->getMessage());
+            return $wikis;
+        } catch (\PDOException $e) {
+            // Handle the exception
+            die("Error: " . $e->getMessage());
+        }
     }
+public function create($data)
+{
+    $stmt =  $this->db->prepare("INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute($data);
+        return $stmt;
 }
+
+
+// public function addWiki($data)
+// {
+//     try { 
+//         // Prepare and execute the SQL query to add a tag
+//         $query = "INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?,?,?,?,?)";
+//         $stmt = $this->db->prepare($query);
+//         $stmt->bindParam(1, $title);
+//         $stmt->bindParam(2, $content);
+//         $stmt->bindParam(3, $categoryID);
+//         $stmt->bindParam(4, $tagID);
+//         $stmt->bindParam(5, $creationDate);
+
+//         $stmt->execute([$data['name']]);
+//         return true;
+//     } catch (\PDOException $e) {
+//         die("Error: " . $e->getMessage());
+//     }
+// }
 
     // public function showTag($tagID): array
     // {

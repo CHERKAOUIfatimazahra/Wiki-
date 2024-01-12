@@ -44,6 +44,12 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/edit_tag/{id}', TagController::class, 'edit');
     $router->post('/update_tag/{id}', TagController::class, 'update');
     $router->get('/delete_tag/{id}', TagController::class, 'destroy');
+
+    // Wiki routes
+    $router->post('/add_wiki', TagController::class, 'add');
+    $router->get('/edit_wiki/{id}', TagController::class, 'edit');
+    $router->post('/update_wiki/{id}', TagController::class, 'update');
+    $router->get('/delete_wiki/{id}', TagController::class, 'destroy');
     
 } else {
     $router->get('/login', AuthController::class, 'login_url');
