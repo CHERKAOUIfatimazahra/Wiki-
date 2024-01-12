@@ -19,47 +19,47 @@ class Wiki
     {
         $this->db = Database::getInstance()->getConnection();
     }
-public function getWikiID(): int
-{
-    return $this->wikiID;
-}
-public function setWikiID(int $wikiID)
-{
-    $this->wikiID = $wikiID;
-}
-public function getTitle() : string
-{
-    return $this->title;
-}
-public function setTitle(string $title)
-{
-    $this->title = $title;
-}
-public function getCategoryID():int
-{
-    return $this->categoryID;
-}
-public function setCategoryID(int $categoryID)
-{
-    $this->categoryID = $categoryID;
-}
-public function getTagID():int
-{
-    return $this->tagID;
-}
-public function setTagID(int $tagID)
-{
-    $this->TagID = $tagID;
-}
-public function getCreationDate() : string
-{
-    return $this->creationDate;
-}
-public function setCreationDate(string $creationDate)
-{
-    $this->creationDate = $creationDate;
-}
-public function showAll()
+    public function getWikiID(): int
+    {
+        return $this->wikiID;
+    }
+    public function setWikiID(int $wikiID)
+    {
+        $this->wikiID = $wikiID;
+    }
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+    }
+    public function getCategoryID(): int
+    {
+        return $this->categoryID;
+    }
+    public function setCategoryID(int $categoryID)
+    {
+        $this->categoryID = $categoryID;
+    }
+    public function getTagID(): int
+    {
+        return $this->tagID;
+    }
+    public function setTagID(int $tagID)
+    {
+        $this->TagID = $tagID;
+    }
+    public function getCreationDate(): string
+    {
+        return $this->creationDate;
+    }
+    public function setCreationDate(string $creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+    public function showAll()
     {
         try {
             // Prepare and execute the SQL query to select all users
@@ -75,15 +75,49 @@ public function showAll()
             die("Error: " . $e->getMessage());
         }
     }
-public function create($data)
-{
-    $stmt =  $this->db->prepare("INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?, ?, ?, ?, ?)");
+    public function create($data)
+    {
+        $stmt = $this->db->prepare("INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute($data);
         return $stmt;
-}
+    }
+
+    public function find($wikiID)
+    {
+        try {
+            // Prepare and execute the SQL query to select a user by ID
+            $query = "SELECT * FROM wiki WHERE wikiID = ?";
+            $statement = $this->db->prepare($query);
+            $statement->execute([$wikiID]);
+
+            // Fetch the user as an associative array
+            $wiki = $statement->fetch(PDO::FETCH_ASSOC);
+
+            return $wiki;
+
+        } catch (\PDOException $e) {
+            // Handle the exception
+            die("Error: " . $e->getMessage());
+        }
+    }
+    public function update($wikiID)
+    {
+        try {
+            // Prepare and execute the SQL query to update a user by ID
+            $query = "UPDATE wiki SET title = ?, content = ?, categoryID = ?, tagID = ?, creationDate = ? WHERE wikiID = ?";
+            $statement = $this->db->prepare($query);
+            $data[] = $wikiID;
+            $statement->execute($data);
+
+            return $statement;
+        } catch (\PDOException $e) {
+            // Handle the exception
+            die("Error: " . $e->getMessage());
+        }
+    }
 
 
-// public function addWiki($data)
+    // public function addWiki($data)
 // {
 //     try { 
 //         // Prepare and execute the SQL query to add a tag
@@ -95,7 +129,7 @@ public function create($data)
 //         $stmt->bindParam(4, $tagID);
 //         $stmt->bindParam(5, $creationDate);
 
-//         $stmt->execute([$data['name']]);
+    //         $stmt->execute([$data['name']]);
 //         return true;
 //     } catch (\PDOException $e) {
 //         die("Error: " . $e->getMessage());

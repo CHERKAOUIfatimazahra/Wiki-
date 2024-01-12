@@ -13,7 +13,13 @@ class UserController extends Controller
         $users = $user->showAll();
         $this->render('dashboard/user_dashboard', ['users' => $users]);
     }
-
+    public function dh()
+    {
+        $user = new User();
+        $users = $user->showAll();
+        $this->render('dashboard/user_dashboard', ['users' => $users]);
+    }
+ 
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -66,9 +72,17 @@ class UserController extends Controller
 
     public function destroy($id): void
     {
+        // dump($_SERVER['REQUEST_METHOD']);die();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = new User();
         $user->delete($id);
-
-        header("Refresh:0; url=dashboard");
+        header('Location: /dashboard');
+        }else {
+            echo "false";
+        }
+        // $delete_result  = $user;
+        
+        
+        
     }
 }

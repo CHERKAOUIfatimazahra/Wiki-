@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use PDO;
 
 class User
@@ -31,7 +32,7 @@ class User
 
     public function create($data)
     {
-        $stmt =  $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
         $stmt->execute($data);
         return $stmt;
     }
@@ -72,54 +73,73 @@ class User
 
     public function delete($id)
     {
-        try {
-            // Prepare and execute the SQL query to delete a user by ID
-            $query = "DELETE FROM users WHERE id = ?";
-            $statement = $this->db->prepare($query);
-            $statement->execute([$id]);
 
-            return $statement;
+
+        // dump($id['id']);die();
+        try {
+            $step = $this->db->prepare("DELETE FROM users WHERE id=:id");
+            $step->bindParam(":id", $id['id'], PDO::PARAM_INT);
+            $step->execute();
+
+            if ($step->execute()) {
+                return $step;
+                // echo $step->rowCount() . ' row(s) was deleted successfully.';
+            }
+
         } catch (\PDOException $e) {
             // Handle the exception
             die("Error: " . $e->getMessage());
         }
+        // connect to the database and select the publisher
+
+        // $user_id = $id ;
+
+        // $sql = 'DELETE FROM users WHERE id = :id';
+
+
+        // $statement = $this->db->prepare($sql);
+        // $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
+
+        // if ($statement->execute()) {
+        //     echo $statement->rowCount() . ' row(s) was deleted successfully.';
+        // }
     }
 
-// login , register and logout
-     public function login($email ,$password) {
-        
-          $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
-        
-          $stmt->bindValue(1, $email);
-          
-          $stmt->execute();
-          $user = $stmt->fetch(PDO::FETCH_ASSOC);
-  
-          if ($user && password_verify($password, $user['password'])) {
-              return $user;
-          }
-  
-          return false;
-      
-      }
-      public function register($name, $email, $password, $role)
-      {
-        
-          $passhash = password_hash($password, PASSWORD_DEFAULT);
-      
-          $stmt = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-      
-          $stmt->bindValue(1, $name);
-          $stmt->bindValue(2, $email);
-          $stmt->bindValue(3, $passhash);
-          $stmt->bindValue(4, $role);
-      
-          $result = $stmt->execute();
-      
-          if ($result) {
-              return true;
-          }
-      
-          return false;
-      }
+    // login , register and logout
+    public function login($email, $password)
+    {
+
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+
+        $stmt->bindValue(1, $email);
+
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+
+        return false;
+
+    }
+    public function register($name, $email, $password, $role)
+    {
+        $passhash = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+
+        $stmt->bindValue(1, $name);
+        $stmt->bindValue(2, $email);
+        $stmt->bindValue(3, $passhash);
+        $stmt->bindValue(4, $role);
+
+
+        $result = $stmt->execute();
+
+        if ($result) {
+            return true;
+        }
+
+        return false;
+    }
 }

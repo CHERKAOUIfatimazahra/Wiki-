@@ -7,7 +7,12 @@ class Router
 
     private function addRoute($route, $controller, $action, $method)
     {
-        $this->routes[$method][$route] = ['controller' => $controller, 'action' => $action];
+        // Convert route with parameters to a regex pattern
+        $pattern = str_replace('/:id', '/(?<id>[^\/]+)', $route);
+        $pattern = str_replace('/', '\/', $pattern);
+        $pattern = "#^" . $pattern . "$#";
+ 
+        $this->routes[$method][$pattern] = ['controller' => $controller, 'action' => $action];
     }
     public function get($route, $controller, $action)
     {
@@ -19,21 +24,38 @@ class Router
     }
     public function dispatch()
     {
-        $uri = strtok($_SERVER['REQUEST_URI'], '?');
-        $method =  $_SERVER['REQUEST_METHOD'];
+        $olduri = strtok($_SERVER['REQUEST_URI'], '?');
 
-        if (array_key_exists($uri, $this->routes[$method])) {
-            $controller = $this->routes[$method][$uri]['controller'];
-            $action = $this->routes[$method][$uri]['action'];
-
-            $controller = new $controller();
-           
-            $controller->$action(); 
-           
+        if ($olduri == "/") {
+            $uri = $olduri;
         } else {
-            // throw new \Exception("No route found for URI: $uri");
-            //  ("Refresh:0; url=login");
-             include "../views/error404.php";
+            $uri = rtrim(strtolower($olduri), '/');
         }
+
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        foreach ($this->routes[$method] as $pattern => $info) {
+            
+            if (preg_match($pattern, $uri, $matches)) {
+                $controller = $info['controller'];
+                $action = $info['action'];
+
+                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+
+                $controllerInstance = new $controller();
+                
+                if (method_exists($controllerInstance, $action)) {
+
+                    $controllerInstance->$action($params);
+
+                } else {
+                    throw new \Exception("Action not found: $action");
+                }
+
+                return;
+            }
+        }
+
+        throw new \Exception("No route found for URI: $uri");
     }
 }

@@ -145,16 +145,18 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Are you sure you want to delete <?= $user['name'] ?>?
+                                            Are you sure you want to delete <?= $user['id'] ?>?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="/delete_user/<?= $user['id'] ?>" class="btn btn-danger">Delete</a>
+                                            <form method="POST" action="/delete_user/<?= $user['id'] ?>">
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+ 
                         <!-- Update Modal -->
             <div class="modal fade" id="updateModal<?= $user['id'] ?>" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                 <div class="modal-dialog">

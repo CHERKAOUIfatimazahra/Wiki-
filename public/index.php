@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 require '../vendor/autoload.php';
 
 
@@ -9,3 +9,4 @@ $dotenv->load();
 // print_r($_ENV);
 $router = require '../src/Routes/index.php';
 
+ob_flush();

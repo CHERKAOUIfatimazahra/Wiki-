@@ -26,31 +26,34 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/dashboard/wiki', WikiController::class, 'index');
     $router->get('/dashboard/tag', TagController::class, 'index');
     // $router->get('/dashboard/category', CategoryController::class, 'index');
+
+    // users routes
     $router->get('/dashboard', UserController::class, 'getAllUser');
+    $router->get('/delete_user/dashboard', UserController::class, 'dh');
     $router->post('/add_user', UserController::class, 'add');
-    $router->get('/edit_user/{id}', UserController::class,'edit');
-    $router->post('/update_user/{id}', UserController::class, 'update');
-    $router->get('/delete_user/{id}', UserController::class, 'destroy');
+    $router->get('/edit_user/:id', UserController::class, 'edit');
+    $router->post('/update_user/:id', UserController::class, 'update');
+    $router->post('/delete_user/:id', UserController::class, 'destroy');
 
     // Category routes
     $router->get('/dashboard/category', CategoryController::class, 'index');
     $router->post('/add_category', CategoryController::class, 'add');
-    $router->get('/edit_category/{id}', CategoryController::class, 'edit');
-    $router->post('/update_category/{id}', CategoryController::class, 'update');
-    $router->get('/delete_category/{id}', CategoryController::class, 'destroy');
+    $router->get('/edit_category/:id', CategoryController::class, 'edit');
+    $router->post('/update_category/:id', CategoryController::class, 'update');
+    $router->get('/delete_category/:id', CategoryController::class, 'destroy');
 
     // Tag routes
     $router->post('/add_tag', TagController::class, 'add');
-    $router->get('/edit_tag/{id}', TagController::class, 'edit');
-    $router->post('/update_tag/{id}', TagController::class, 'update');
-    $router->get('/delete_tag/{id}', TagController::class, 'destroy');
+    $router->get('/edit_tag/:id', TagController::class, 'edit');
+    $router->post('/update_tag/:id', TagController::class, 'update');
+    $router->get('/delete_tag/:id', TagController::class, 'destroy');
 
     // Wiki routes
     $router->post('/add_wiki', TagController::class, 'add');
-    $router->get('/edit_wiki/{id}', TagController::class, 'edit');
-    $router->post('/update_wiki/{id}', TagController::class, 'update');
-    $router->get('/delete_wiki/{id}', TagController::class, 'destroy');
-    
+    $router->get('/edit_wiki/:id', TagController::class, 'edit');
+    $router->post('/update_wiki/:id', TagController::class, 'update');
+    $router->get('/delete_wiki/:id', TagController::class, 'destroy');
+
 } else {
     $router->get('/login', AuthController::class, 'login_url');
 }
