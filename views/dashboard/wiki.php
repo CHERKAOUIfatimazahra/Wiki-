@@ -76,9 +76,9 @@
 
                             <div class="form-outline mb-2">
                                 <label class="form-label" for="form3Example1cg">tags</label>
-                                <select name="tagID" id="tagID" class="form-control form-control-lg" select name="tags"
+                                <select name="tags[]" id="tagID" class="form-control form-control-lg" select
                                     id="tags" multiple>
-                                    <option value="" selected>SELECT Tags</option>
+                                
                                     <?php foreach ($tags as $tag) {
                                         echo "<option value='{$tag['tagID']}'>{$tag['tagName']}</option>";
                                     } ?>

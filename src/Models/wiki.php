@@ -12,7 +12,6 @@ class Wiki
     private string $title;
     private string $content;
     private int $categoryID;
-    private int $tagID;
     private string $creationDate;
 
     public function __construct()
@@ -43,14 +42,6 @@ class Wiki
     {
         $this->categoryID = $categoryID;
     }
-    public function getTagID(): int
-    {
-        return $this->tagID;
-    }
-    public function setTagID(int $tagID)
-    {
-        $this->TagID = $tagID;
-    }
     public function getCreationDate(): string
     {
         return $this->creationDate;
@@ -77,7 +68,7 @@ class Wiki
     }
     public function create($data)
     {
-        $stmt = $this->db->prepare("INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO wiki (title,content,categoryID,creationDate) VALUES (?, ?, ?, ?)");
         $stmt->execute($data);
         return $stmt;
     }
@@ -104,7 +95,7 @@ class Wiki
     {
         try {
             // Prepare and execute the SQL query to update a user by ID
-            $query = "UPDATE wiki SET title = ?, content = ?, categoryID = ?, tagID = ?, creationDate = ? WHERE wikiID = ?";
+            $query = "UPDATE wiki SET title = ?, content = ?, categoryID = ?, creationDate = ? WHERE wikiID = ?";
             $statement = $this->db->prepare($query);
             $data[] = $wikiID;
             $statement->execute($data);
@@ -116,6 +107,18 @@ class Wiki
         }
     }
 
+
+    public function createWiki_Tags($data)
+    {
+        $stmt = $this->db->prepare("INSERT INTO wiki_Tags (tag_id,wiki_id) VALUES (?, ?)");
+        $stmt->execute($data);
+        return $stmt;
+    }
+
+
+    public function getlastInsertedId(){
+        return $this->db->lastInsertId();
+    }
 
     // public function addWiki($data)
 // {
@@ -185,4 +188,7 @@ class Wiki
     //         die("Error: " . $e->getMessage());
     //     }
     // }
+    public function getCount(){
+        return $this->selectRecords('COUNT(*) as COUNT');
+    }
 }

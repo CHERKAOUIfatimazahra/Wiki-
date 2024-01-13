@@ -97,4 +97,7 @@ class Tag
             die("Error: " . $e->getMessage());
         }
     }
+    public function getCount(){
+        return $this->selectRecords('COUNT(*) as COUNT');
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Controller;
 use App\Models\Wiki;
+use App\Models\Category;
+use App\Models\Tag;
 
 class WikiController extends Controller
 {
@@ -17,17 +19,26 @@ class WikiController extends Controller
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $wiki = new Wiki();
+
             $title = isset($_POST["title"]) ? $_POST["title"] : "";
             $content = isset($_POST["content"]) ? $_POST["content"] : "";
             $categoryID = isset($_POST["categoryID"]) ? $_POST["categoryID"] : "";
-            $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
+
+            $tags = $_POST["tags"] ? $_POST["tags"] : "";
             $creationDate = isset($_POST["creationDate"]) ? $_POST["creationDate"] : "";
-            $data = [$title, $content, $categoryID, $tagID, $creationDate];
-
-            $wiki = new Wiki();
+            $data = [$title, $content, $categoryID, $creationDate];
             $wiki->create($data);
+            $wiki_id = $wiki->getlastInsertedId();
+            foreach ($tags as $tag_id) {
+                if (!$wiki->createWiki_Tags([$wiki_id, $tag_id])) {
+                    echo 'tag with id ' . $tags . ' not insert';
+                }
+            }
 
-            header("Refresh:0; url=dashboard");
+            header("Refresh:0; url=dashboard/wiki");
+
+
         } else {
             // Handle non-POST requests or redirect accordingly
         }
@@ -79,10 +90,16 @@ class WikiController extends Controller
 
     // }
 
-    // function index(): void
-    // {
-    //     $this->render("/dashboard/wiki");
-    // }
+    function index(): void
+    {
+        $wikis = new Wiki();
+        $category = new Category();
+        $categories = $category->showAllCategory();
+
+        $tag = new Tag();
+        $tags = $tag->showAllTags();
+        $this->render("/dashboard/wiki", ['wikis' => $wikis, 'categories' => $categories, 'tags' => $tags]);
+    }
     // function create(): void
     // {
 

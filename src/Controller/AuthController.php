@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         header("Refresh:0; url=login");
     }
-
+ 
     public function logout()
     {
         session_destroy();

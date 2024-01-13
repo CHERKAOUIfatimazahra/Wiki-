@@ -41,21 +41,26 @@
                     <span class="text">Dashboard</span>
                 </div>
                 
-                <div class="boxes p-4 mb-2">
-                    <div class="box box1">
+                <div class="boxes p-3 mb-6">
+                    <div class="box box1 col-md-6 mb-4">
                         <i class="uil uil-thumbs-up"></i>
-                        <span class="text">Total Likes</span>
-                        <span class="number">50,120</span>
+                        <span class="text">Total Wikis</span>
+                        <span class="number"><?=$wikiCount?></span>
                     </div>
-                    <div class="box box2">
+                    <div class="box box2 col-md-3 mb-4">
                         <i class="uil uil-comments"></i>
-                        <span class="text">Comments</span>
-                        <span class="number">20,120</span>
+                        <span class="text">Total Users</span>
+                        <span class="number"><?=$userCount?></span>
                     </div>
-                    <div class="box box3">
+                    <div class="box box3 col-md-3 mb-4">
                         <i class="uil uil-share"></i>
-                        <span class="text">Total Share</span>
-                        <span class="number">10,120</span>
+                        <span class="text">Total Tags</span>
+                        <span class="number"><?=$tagCount?></span>
+                    </div>
+                    <div class="box box2 col-md-3 mb-4">
+                        <i class="uil uil-share"></i>
+                        <span class="text">Total Category</span>
+                        <span class="number"><?=$catCount?></span>
                     </div>
                 </div>
             </div>

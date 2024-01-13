@@ -142,4 +142,7 @@ class User
 
         return false;
     }
+    public function getCount(){
+        return $this->selectRecords('COUNT(*) as COUNT',' role = "author" ');
+    }
 }

@@ -17,7 +17,7 @@ class TagController extends Controller
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            
+
             $tagName = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
             $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
             $data = ['name' => $tagName];
@@ -25,7 +25,7 @@ class TagController extends Controller
             $tag = new Tag();
             $tag->addTag($data);
 
-            header("Refresh:0; url=dashboard/tag"); 
+            header("Refresh:0; url=dashboard/tag");
         } else {
             // error message
         }
@@ -52,9 +52,9 @@ class TagController extends Controller
             $data = [$tagName, $tagID];
 
             $tag = new Tag();
-            $tag->editTag($id, $data);  
+            $tag->editTag($id, $data);
 
-            header("Refresh:0; url=dashboard/tag"); 
+            header("Refresh:0; url=dashboard/tag");
         } else {
             // error message
         }
@@ -63,8 +63,8 @@ class TagController extends Controller
     public function destroy($id): void
     {
         $tag = new Tag();
-        $tag->deleteTag($id);  
+        $tag->deleteTag($id);
 
-        header("Refresh:0; url=dashboard/tag"); 
+        header("Refresh:0; url=dashboard/tag");
     }
 }
