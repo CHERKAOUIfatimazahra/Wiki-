@@ -35,36 +35,39 @@
         <div class="dash-content">
 
             <!-- statistique -->
-            <div class="overview">
-                <div class="title">
-                    <i class="uil uil-tachometer-fast-alt"></i>
-                    <span class="text">Dashboard</span>
-                </div>
-                
-                <div class="boxes p-3 mb-6">
-                    <div class="box box1 col-md-6 mb-4">
-                        <i class="uil uil-thumbs-up"></i>
-                        <span class="text">Total Wikis</span>
-                        <span class="number"><?=$wikiCount?></span>
-                    </div>
-                    <div class="box box2 col-md-3 mb-4">
-                        <i class="uil uil-comments"></i>
-                        <span class="text">Total Users</span>
-                        <span class="number"><?=$userCount?></span>
-                    </div>
-                    <div class="box box3 col-md-3 mb-4">
-                        <i class="uil uil-share"></i>
-                        <span class="text">Total Tags</span>
-                        <span class="number"><?=$tagCount?></span>
-                    </div>
-                    <div class="box box2 col-md-3 mb-4">
-                        <i class="uil uil-share"></i>
-                        <span class="text">Total Category</span>
-                        <span class="number"><?=$catCount?></span>
-                    </div>
-                </div>
-            </div>
-            <!-- end statistique -->
+<div class="overview">
+    <div class="title">
+        <i class="uil uil-tachometer-fast-alt"></i>
+        <span class="text">Dashboard</span>
+    </div>
+
+    <div class="boxes p-3 mb-6">
+    <?php if (isset($categoryCount)): ?>
+        <div class="box box1 col-md-6 mb-4">
+            <i class="uil uil-thumbs-up"></i>
+            <span class="text">Total Categories</span>
+            <span class="number"><?=$categoryCount?></span>
+        </div>
+    <?php endif ?>
+        <!-- <div class="box box2 col-md-3 mb-4">
+            <i class="uil uil-comments"></i>
+            <span class="text">Total Tags</span>
+            <span class="number"><?= $tagCount ?></span>
+        </div>
+        <div class="box box3 col-md-3 mb-4">
+            <i class="uil uil-share"></i>
+            <span class="text">Total Users</span>
+            <span class="number"><?= $userCount ?></span>
+        </div>
+        <div class="box box2 col-md-3 mb-4">
+            <i class="uil uil-share"></i>
+            <span class="text">Total Wikis</span>
+            <span class="number"><?= $wikiCount ?></span>
+        </div> -->
+        
+    </div>
+</div>
+<!-- end statistique -->
 
             <!-- add auteur -->
             <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -129,7 +132,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($users as $user) : ?>
-                            <tr>
+                            <tr> 
                                 <th scope="row"><?= $user['id'] ?></th>
                                 <td><?= $user['name'] ?></td>
                                 <td><?= $user['email'] ?></td>
@@ -155,7 +158,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             <form method="POST" action="/delete_user/<?= $user['id'] ?>">
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            <button type="submit" class="btn btn-primary">Delete</button>
                                             </form>
                                         </div>
                                     </div>
@@ -214,6 +217,7 @@
     <script src="/assets/js/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <!-- end script -->
+
 </body>
 
 </html>

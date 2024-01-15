@@ -51,21 +51,27 @@ class Wiki
         $this->creationDate = $creationDate;
     }
     public function showAll()
-    {
-        try {
-            // Prepare and execute the SQL query to select all users
-            $query = "SELECT * FROM wiki";
-            $statement = $this->db->query($query);
+{
+    try {
+        // Prepare and execute the SQL query to select all wikis with tags and category
+        $query = "SELECT wiki.*, GROUP_CONCAT(DISTINCT tag.tagName) AS tags, category.categoryName
+                  FROM wiki
+                  LEFT JOIN wikiTags ON wiki.wikiID = wikiTags.wiki_id
+                  LEFT JOIN tag ON wikiTags.tag_id = tag.tagID
+                  LEFT JOIN category ON wiki.categoryID = category.categoryID
+                  GROUP BY wiki.wikiID";
 
-            // Fetch all users as an associative array
-            $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement = $this->db->query($query);
+        $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            return $wikis;
-        } catch (\PDOException $e) {
-            // Handle the exception
-            die("Error: " . $e->getMessage());
-        }
+        return $wikis;
+    } catch (\PDOException $e) {
+        // Handle the exception
+        die("Error: " . $e->getMessage());
     }
+}
+
+    
     public function create($data)
     {
         $stmt = $this->db->prepare("INSERT INTO wiki (title,content,categoryID,creationDate) VALUES (?, ?, ?, ?)");
@@ -73,31 +79,32 @@ class Wiki
         return $stmt;
     }
 
+    
     public function find($wikiID)
-    {
-        try {
-            // Prepare and execute the SQL query to select a user by ID
-            $query = "SELECT * FROM wiki WHERE wikiID = ?";
-            $statement = $this->db->prepare($query);
-            $statement->execute([$wikiID]);
+{
+    
+    try {
+        $query = "SELECT * FROM wiki WHERE wikiID = ?";
+        $statement = $this->db->prepare($query);
+        $statement->execute([$wikiID]); // Pass the parameter directly as an array
 
-            // Fetch the user as an associative array
-            $wiki = $statement->fetch(PDO::FETCH_ASSOC);
+        // Fetch the user as an associative array
+        $wiki = $statement->fetch(PDO::FETCH_ASSOC);
 
-            return $wiki;
-
-        } catch (\PDOException $e) {
-            // Handle the exception
-            die("Error: " . $e->getMessage());
-        }
+        return $wiki;
+    } catch (\PDOException $e) {
+        // Handle the exception
+        die("Error: " . $e->getMessage());
     }
-    public function update($wikiID)
+}
+
+    public function update($data)
     {
         try {
             // Prepare and execute the SQL query to update a user by ID
             $query = "UPDATE wiki SET title = ?, content = ?, categoryID = ?, creationDate = ? WHERE wikiID = ?";
             $statement = $this->db->prepare($query);
-            $data[] = $wikiID;
+            
             $statement->execute($data);
 
             return $statement;
@@ -110,7 +117,7 @@ class Wiki
 
     public function createWiki_Tags($data)
     {
-        $stmt = $this->db->prepare("INSERT INTO wiki_Tags (tag_id,wiki_id) VALUES (?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO wikiTags (tag_id,wiki_id) VALUES (?, ?)");
         $stmt->execute($data);
         return $stmt;
     }
@@ -176,19 +183,15 @@ class Wiki
     //         die("Error: " . $e->getMessage());
     //     }
     // }
-    // public function deleteTag($tagID): bool
-    // {
-    //     try {
-    //         // Prepare and execute the SQL query to delete a tag by ID
-    //         $query = "DELETE FROM tag WHERE tagID = ?";
-    //         $stmt = $this->db->prepare($query);
-    //         $stmt->execute([$tagID]);
-    //         return true;
-    //     } catch (\PDOException $e) {
-    //         die("Error: " . $e->getMessage());
-    //     }
-    // }
-    public function getCount(){
-        return $this->selectRecords('COUNT(*) as COUNT');
+    public function dalete($wikiID): bool
+    {
+        try {
+            $query = "DELETE FROM wiki WHERE wikiID = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$wikiID]);
+            return true;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
     }
 }

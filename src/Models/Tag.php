@@ -97,7 +97,17 @@ class Tag
             die("Error: " . $e->getMessage());
         }
     }
-    public function getCount(){
-        return $this->selectRecords('COUNT(*) as COUNT');
+    public function getCount(): int
+    {
+        try {
+            // Prepare and execute the SQL query to get the count of tags
+            $query = "SELECT COUNT(*) as count FROM tag";
+            $stmt = $this->db->query($query);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result['count'] ?? 0;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
     }
 }

@@ -8,11 +8,12 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     public function index(): void
-    {
-        $category = new Category();
-        $categories = $category->showAllCategory();
-        $this->render("/dashboard/category", ['categories' => $categories]);
-    }
+{
+    $category = new Category();
+    $categories = $category->showAllCategory();
+
+    $this->render("/dashboard/category", ['categories' => $categories]);
+}
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,8 +24,6 @@ class CategoryController extends Controller
             $category->addCategory($data);
 
             header("Refresh:0; url=dashboard/category");
-        } else {
-            // Handle non-POST requests or redirect accordingly
         }
     }
     public function create(): void
@@ -36,17 +35,33 @@ class CategoryController extends Controller
             $category->addCategory(['name' => $name]);
 
             header("Refresh:0; url=dashboard/category");
-        } else {
-            // Handle non-POST requests or redirect accordingly
         }
     }
 
+    // public function destroy($categoryID): void
+    // {
+    //     $category = new Category();
+    //     $category->deleteCategory($categoryID);
+
+    //     header("Refresh:0; url=dashboard/category");
+    // }
     public function destroy($categoryID): void
     {
-        $category = new Category();
-        $category->deleteCategory($categoryID);
 
-        header("Refresh:0; url=dashboard/category");
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $category = new Category();
+            $category->delete($categoryID);
+            header('Location: /dashboard/category');
+        } else {
+            echo "false";
+        }
+    }
+    public function dc()
+    {
+        $category = new Category();
+        $categorys = $category->showAllCategory();
+        
+        $this->render("/dashboard/category", ['categorys' => $categorys]);
     }
 
     public function update($categoryID): void
@@ -76,4 +91,5 @@ class CategoryController extends Controller
 
         $this->render('dashboard/edit_category', ['category' => $categoryData]);
     }
+    
 }

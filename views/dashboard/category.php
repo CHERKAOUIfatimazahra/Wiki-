@@ -119,12 +119,14 @@
                             Are you sure you want to delete <?= $category['categoryName'] ?>?
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="/delete_category/<?= $category['categoryID'] ?>" class="btn btn-danger">Delete</a>
-                        </div>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form method="POST" action="/delete_category/<?= $category['categoryID'] ?>">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                            </form>
+                                        </div>
                     </div>
                 </div>
-            </div>
+            </div> 
 
         <?php endforeach ?>
     </tbody>

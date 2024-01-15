@@ -82,18 +82,45 @@ use PDO;
             }
         }
     
-        public function deleteCategory($categoryID): bool
-        {
-            try {
-                $query = "DELETE FROM category WHERE categoryID = ?";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute([$categoryID]);
-                return true;
-            } catch (\PDOException $e) {
-                die("Error: " . $e->getMessage());
+        // public function delete($categoryID): bool
+        // {
+        //     try {
+        //         $query = "DELETE FROM category WHERE categoryID = ?";
+        //         $stmt = $this->db->prepare($query);
+        //         $stmt->execute([$categoryID]);
+        //         return true;
+        //     } catch (\PDOException $e) {
+        //         die("Error: " . $e->getMessage());
+        //     }
+        // }
+        public function delete($categoryID)
+    {
+        try {
+            $step = $this->db->prepare("DELETE FROM category WHERE categoryID =:id");
+            $step->bindParam(":id", $categoryID['categoryID'], PDO::PARAM_INT);
+            $step->execute();
+
+            if ($step->execute()) {
+                return $step;
+                // echo $step->rowCount() . ' row(s) was deleted successfully.';
             }
+
+        } catch (\PDOException $e) {
+            // Handle the exception
+            die("Error: " . $e->getMessage());
         }
-        public function getCount(){
-            return $this->selectRecords('COUNT(*) as COUNT');
+    }
+    //statistic
+        public function getCount(): int
+    {
+        try {
+            $query = "SELECT COUNT(*) AS count FROM category";
+            $stmt = $this->db->query($query);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result['count'] ?? 0;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
         }
+    }
     }

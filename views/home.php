@@ -10,9 +10,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="../public/assets/styles/home.css">
-  <link rel="stylesheet" href="../public/assets/styles/navbar.css">
-  <link rel="stylesheet" href="../public/assets/styles/footer.css">
+  <link rel="stylesheet" href="/assets/styles/home.css">
+  <link rel="stylesheet" href="/assets/styles/navbar.css">
+  <link rel="stylesheet" href="/assets/styles/footer.css">
   <script src="/assets/js/home.js" defer></script>
 </head>
 
@@ -27,10 +27,7 @@
         <input class="prompt-input" type="text" placeholder="Describe what you want to see" required>
         <div class="controls">
           <select class="img-quantity">
-            <option value="1">1 category</option>
-            <option value="2">2 category</option>
-            <option value="3">3 category</option>
-            <option value="4" selected>4 category</option>
+            <option value="1"><?= $category['categoryName']?></option>
           </select>
           <button type="submit" class="generate-btn">Generate</button>
         </div>
@@ -40,15 +37,17 @@
 
   <section class="image-gallery">
 	<div class="row m-3 p-3">
+  <?php foreach ($wikis as $wiki): ?>
 		<div class="col-sm-4 mb-3">
 			<div class="card">
 			<div class="card-body">
-				<h5 class="card-title">Special title treatment</h5>
-				<p class="card-text">With supporting text below as a natural lead-in to additional content.With supporting text below as a natural lead-in to additional content.</p>
-				<a href="single_page.php" class="btn btn-warning">Go somewhere</a>
+				<h5 class="card-title"><?= $wiki['title'] ?></h5>
+				<p class="card-text"><?= $wiki['content'] ?></p>
+				<a href="/single_page" class="btn btn-warning">Go somewhere</a>
 			</div>
 			</div>
 		</div>
+  <?php endforeach ?>
 		<div class="col-sm-4 mb-3">
 			<div class="card">
 			<div class="card-body">

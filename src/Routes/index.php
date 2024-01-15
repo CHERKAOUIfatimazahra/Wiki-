@@ -24,6 +24,10 @@ $router->get('/', HomeController::class, 'index');
 // Dashboard
 if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 1)) {
     $router->get('/dashboard/wiki', WikiController::class, 'index');
+    $router->get('/wiki/update', WikiController::class, 'findbyId');
+
+
+
     $router->get('/dashboard/tag', TagController::class, 'index');
     // $router->get('/dashboard/category', CategoryController::class, 'index');
 
@@ -37,10 +41,12 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
 
     // Category routes
     $router->get('/dashboard/category', CategoryController::class, 'index');
+    $router->get('/delete_category/dashboard', CategoryController::class, 'dc');
     $router->post('/add_category', CategoryController::class, 'add');
     $router->get('/edit_category/:id', CategoryController::class, 'edit');
     $router->post('/update_category/:id', CategoryController::class, 'update');
-    $router->get('/delete_category/:id', CategoryController::class, 'destroy');
+    $router->post('/delete_category/:id', CategoryController::class, 'destroy');
+    
 
     // Tag routes
     $router->post('/add_tag', TagController::class, 'add');
@@ -49,10 +55,11 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/delete_tag/:id', TagController::class, 'destroy');
 
     // Wiki routes
+    $router->get('/', WikiController::class, 'index');
     $router->post('/add_wiki', WikiController::class, 'add');
-    // $router->get('/edit_wiki/:id', TagController::class, 'edit');
+    $router->post('/edit_wiki', WikiController::class, 'update');
     // $router->post('/update_wiki/:id', TagController::class, 'update');
-    // $router->get('/delete_wiki/:id', TagController::class, 'destroy');
+    $router->post('/delete_wiki', WikiController::class, 'destroy');
 
 } else {
     $router->get('/login', AuthController::class, 'login_url');

@@ -142,7 +142,17 @@ class User
 
         return false;
     }
-    public function getCount(){
-        return $this->selectRecords('COUNT(*) as COUNT',' role = "author" ');
+    public function getCount(): int
+    {
+        try {
+            // Prepare and execute the SQL query to get the count of users
+            $query = "SELECT COUNT(*) as count FROM users";
+            $stmt = $this->db->query($query);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result['count'] ?? 0;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
     }
 }

@@ -12,7 +12,7 @@ class UserController extends Controller
         $user = new User();
         $users = $user->showAll();
         $this->render('dashboard/user_dashboard', ['users' => $users]);
-    }
+    } 
     public function dh()
     {
         $user = new User();
