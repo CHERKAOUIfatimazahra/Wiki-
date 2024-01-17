@@ -11,7 +11,7 @@ class Router
         $pattern = str_replace('/:id', '/(?<id>[^\/]+)', $route);
         $pattern = str_replace('/', '\/', $pattern);
         $pattern = "#^" . $pattern . "$#";
- 
+
         $this->routes[$method][$pattern] = ['controller' => $controller, 'action' => $action];
     }
     public function get($route, $controller, $action)
@@ -35,7 +35,7 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'];
 
         foreach ($this->routes[$method] as $pattern => $info) {
-            
+
             if (preg_match($pattern, $uri, $matches)) {
                 $controller = $info['controller'];
                 $action = $info['action'];
@@ -43,7 +43,7 @@ class Router
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
                 $controllerInstance = new $controller();
-                
+
                 if (method_exists($controllerInstance, $action)) {
 
                     $controllerInstance->$action($params);

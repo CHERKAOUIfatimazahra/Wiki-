@@ -8,18 +8,19 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function getAllUser()
-    {
+    {  
+        
         $user = new User();
-        $users = $user->showAll();
-        $this->render('dashboard/user_dashboard', ['users' => $users]);
-    } 
+        $users = $user->showAll(); 
+        $statistic = $user->getStatistic();
+        $this->render('dashboard/user_dashboard', ['users' => $users  ,"statistic" =>$statistic]);
+    }
     public function dh()
     {
         $user = new User();
         $users = $user->showAll();
         $this->render('dashboard/user_dashboard', ['users' => $users]);
     }
-
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,25 +34,15 @@ class UserController extends Controller
             $user->create($data);
 
             header("Refresh:0; url=dashboard");
-        } else {
-            // Handle non-POST requests or redirect accordingly
         }
     }
-
     public function edit($id): void
     {
         $user = new User();
         $userData = $user->find($id);
 
-        if (!$userData) {
-            // Handle case where user with given $id is not found
-            // You may redirect or display an error message
-            return;
-        }
-
         $this->render('dashboard/edit_user', ['user' => $userData]);
     }
-
     public function update($id): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -65,14 +56,10 @@ class UserController extends Controller
             $user->update($id, $data);
 
             header("Refresh:0; url=dashboard");
-        } else {
-            // Handle non-POST requests or redirect accordingly
         }
     }
-
     public function destroy($id): void
     {
-        // dump($_SERVER['REQUEST_METHOD']);die();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = new User();
             $user->delete($id);
@@ -80,9 +67,5 @@ class UserController extends Controller
         } else {
             echo "false";
         }
-        // $delete_result  = $user;
-
-
-
     }
 }

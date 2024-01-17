@@ -32,7 +32,6 @@ class WikiController extends Controller
 
         // Check if $wikiData is an array before using it
         if (is_array($wikiData)) {
-            // Return the data as JSON
             header('Content-Type: application/json');
             echo json_encode($wikiData);
         } else {
@@ -61,24 +60,14 @@ class WikiController extends Controller
                     echo 'tag with id ' . $tags . ' not insert';
                 }
             }
-
             header("Refresh:0; url=dashboard/wiki");
 
-
-        } else {
-            // Handle non-POST requests or redirect accordingly
         }
     }
     public function edit($wikiID)
     {
         $wiki = new Wiki();
         $wikiData = $wiki->find($wikiID);
-
-        if (!$wikiData) {
-            // Handle case where user with given $id is not found
-            // You may redirect or display an error message
-            return;
-        }
 
         $this->render('dashboard/edit_wiki', ['wiki' => $wikiData]);
     }
@@ -89,31 +78,24 @@ class WikiController extends Controller
             $title = isset($_POST["title"]) ? $_POST["title"] : "";
             $content = isset($_POST["content"]) ? $_POST["content"] : "";
             $categoryID = isset($_POST["categoryID"]) ? $_POST["categoryID"] : "";
-            $creationDate = isset($_POST["creationDate"]) ? $_POST["creationDate"] : "";
-            $data = [$title, $content, $categoryID, $creationDate, $wikiID];$status = isset($_POST["status"]) ? $_POST["status"] : "Draft";
-            $creationDate = isset($_POST["creationDate"]) ? $_POST["creationDate"] : "";
 
-            $data = [$title, $content, $categoryID, $creationDate, $status];
+
+            $data = [$title, $content, $categoryID];
 
             $wiki = new Wiki();
             $wiki->update($data);
 
             header("Refresh:0; url=dashboard/wiki");
-        } else {
-            // Handle non-POST requests or redirect accordingly
         }
     }
-
     public function destroy(): void
     {
-        // dump($_SERVER['REQUEST_METHOD']);die();
         $wikiID = isset($_POST["wikiIDDeletye"]) ? $_POST["wikiIDDeletye"] : "";
         $wiki = new Wiki();
         $wiki->dalete($wikiID);
 
         header("Refresh:0; url=dashboard/wiki");
     }
-
     function index(): void
     {
         $wiki = new Wiki();
@@ -122,9 +104,40 @@ class WikiController extends Controller
 
         $categories = $category->showAllCategory();
         $tags = $tag->showAllTags();
+       
+        if($_SESSION['role'] == 1){
+        
         $wikis = $wiki->showAll();
-
+            } else if ($_SESSION['role'] ==2) {
+                $wikis = $wiki->showAllAuthor();
+            }
         $this->render("/dashboard/wiki", ['wikis' => $wikis, 'categories' => $categories, 'tags' => $tags]);
+    }
+    function archived()
+    {
+        if ($_SERVER["REQUEST_METHOD"]) {
+
+            $wiki = new Wiki();
+            if ($wiki->updateStatus(["id" => $_POST["id"], "status" => "Archived"])) {
+                header("Location: " . $_SERVER['HTTP_REFERER']);
+
+            } else
+                echo "error";
+        } else
+            "no data ";
+    }
+    function published()
+    {
+        if ($_SERVER["REQUEST_METHOD"]) {
+
+            $wiki = new Wiki();
+            if ($wiki->updateStatus(["id" => $_POST["id"], "status" => "Published"])) {
+                header("Location: " . $_SERVER['HTTP_REFERER']);
+
+            }
+            echo "error";
+        } else
+            "no data ";
     }
 
 }

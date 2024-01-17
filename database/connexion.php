@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\connexion;
+namespace App\connexion;
 
 use PDO;
 use PDOException;
@@ -23,7 +23,6 @@ class connexion
             }
         } catch (PDOException $e) {
             echo "Error adding user: " . $e->getMessage();
-            // return false;
         }
     }
 

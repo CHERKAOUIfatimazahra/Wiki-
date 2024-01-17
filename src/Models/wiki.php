@@ -51,69 +51,117 @@ class Wiki
         $this->creationDate = $creationDate;
     }
     public function showAll()
-{
-    try {
-        // Prepare and execute the SQL query to select all wikis with tags and category
-        $query = "SELECT wiki.*, GROUP_CONCAT(DISTINCT tag.tagName) AS tags, category.categoryName
+    {
+        try {
+            $query = "SELECT wiki.*, GROUP_CONCAT(DISTINCT tag.tagName) AS tags, category.categoryName
                   FROM wiki
                   LEFT JOIN wikiTags ON wiki.wikiID = wikiTags.wiki_id
                   LEFT JOIN tag ON wikiTags.tag_id = tag.tagID
                   LEFT JOIN category ON wiki.categoryID = category.categoryID
                   GROUP BY wiki.wikiID";
 
-        $statement = $this->db->query($query);
-        $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $statement = $this->db->query($query);
+            $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return $wikis;
-    } catch (\PDOException $e) {
-        // Handle the exception
-        die("Error: " . $e->getMessage());
+            return $wikis;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
     }
-}
-
-    
-    public function create($data)
-    {
-        $stmt = $this->db->prepare("INSERT INTO wiki (title,content,categoryID,creationDate) VALUES (?, ?, ?, ?)");
-        $stmt->execute($data);
-        return $stmt;
-    }
-
-    
-    public function find($wikiID)
-{
-    
-    try {
-        $query = "SELECT * FROM wiki WHERE wikiID = ?";
-        $statement = $this->db->prepare($query);
-        $statement->execute([$wikiID]); // Pass the parameter directly as an array
-
-        // Fetch the user as an associative array
-        $wiki = $statement->fetch(PDO::FETCH_ASSOC);
-
-        return $wiki;
-    } catch (\PDOException $e) {
-        // Handle the exception
-        die("Error: " . $e->getMessage());
-    }
-}
-
-    public function update($data)
+    public function showAllAuthor()
     {
         try {
-            // Prepare and execute the SQL query to update a user by ID
-            $query = "UPDATE wiki SET title = ?, content = ?, categoryID = ?, creationDate = ? WHERE wikiID = ?";
-            $statement = $this->db->prepare($query);
-            
-            $statement->execute($data);
+              $isUser =    $_SESSION["idUser"];
+            $query = "SELECT wiki.*, GROUP_CONCAT(DISTINCT tag.tagName) AS tags, category.categoryName
+                  FROM wiki
+                  LEFT JOIN wikiTags ON wiki.wikiID = wikiTags.wiki_id
+                  LEFT JOIN tag ON wikiTags.tag_id = tag.tagID
+                  LEFT JOIN category ON wiki.categoryID = category.categoryID
+                  WHERE  userId  =  $isUser
+                  GROUP BY wiki.wikiID";
 
-            return $statement;
+            $statement = $this->db->query($query);
+            $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $wikis;
         } catch (\PDOException $e) {
-            // Handle the exception
+            die("Error: " . $e->getMessage());
+        }
+    }
+    public function create($data)
+    { 
+        
+unset($data[4]);
+unset($data[3]);
+
+$id = $_SESSION["idUser"];
+
+$sql = "INSERT INTO wiki (title, content, categoryID, userId) VALUES (?, ?, ?, ?)";
+
+$stmt = $this->db->prepare($sql);
+
+$stmt->bindParam(1, $data[0], PDO::PARAM_STR);
+$stmt->bindParam(2, $data[1], PDO::PARAM_STR);
+$stmt->bindParam(3, $data[2], PDO::PARAM_INT);
+$stmt->bindParam(4, $id, PDO::PARAM_INT);
+
+$stmt->execute();
+
+
+    }
+    public function find($wikiID)
+    {
+        try {
+            $query = "SELECT wiki.*, GROUP_CONCAT(DISTINCT tag.tagName) AS tags, category.categoryName
+                      FROM wiki
+                      LEFT JOIN wikiTags ON wiki.wikiID = wikiTags.wiki_id
+                      LEFT JOIN tag ON wikiTags.tag_id = tag.tagID
+                      LEFT JOIN category ON wiki.categoryID = category.categoryID
+                      WHERE wikiID = ?
+                      GROUP BY wiki.wikiID" ;
+            $statement = $this->db->prepare($query);
+            $statement->execute([$wikiID]);
+
+            $wiki = $statement->fetch(PDO::FETCH_ASSOC);
+
+            return $wiki;
+        } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());
         }
     }
 
+    public function update($data)
+    {
+        try {
+            $query = "UPDATE wiki SET title = ?, content = ?, categoryID = ?, tagID = ? WHERE wikiID = ?";
+            $statement = $this->db->prepare($query);
+
+            $statement->execute($data);
+
+            return $statement;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+    public function updateStatus(array $data)
+    {
+        try {
+            $status = $data["status"];
+            $wikiID = $data["id"];
+            $wikiID += 0;
+            $query = "UPDATE `wiki` SET status = :status WHERE wikiID = :wikiID";
+            $statement = $this->db->prepare($query);
+
+            $statement->bindParam(':status', $status, PDO::PARAM_STR);
+            $statement->bindParam(':wikiID', $wikiID, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
 
     public function createWiki_Tags($data)
     {
@@ -122,67 +170,33 @@ class Wiki
         return $stmt;
     }
 
-
-    public function getlastInsertedId(){
+    public function getlastInsertedId()
+    {
         return $this->db->lastInsertId();
     }
 
-    // public function addWiki($data)
-// {
-//     try { 
-//         // Prepare and execute the SQL query to add a tag
-//         $query = "INSERT INTO wiki (title,content,categoryID,tagID,creationDate) VALUES (?,?,?,?,?)";
-//         $stmt = $this->db->prepare($query);
-//         $stmt->bindParam(1, $title);
-//         $stmt->bindParam(2, $content);
-//         $stmt->bindParam(3, $categoryID);
-//         $stmt->bindParam(4, $tagID);
-//         $stmt->bindParam(5, $creationDate);
+    function seacrhByTitle ($title) {
+        try {
+            $query = "SELECT wiki.*, GROUP_CONCAT(DISTINCT tag.tagName) AS tags, category.categoryName
+                      FROM wiki
+                      LEFT JOIN wikiTags ON wiki.wikiID = wikiTags.wiki_id
+                      LEFT JOIN tag ON wikiTags.tag_id = tag.tagID
+                      LEFT JOIN category ON wiki.categoryID = category.categoryID
+                      WHERE wiki.title LIKE '%$title%'
+                      GROUP BY wiki.wikiID";
+        
+            $statement = $this->db->prepare($query);
+        
+            $statement->execute();
+        
+            $wikis = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+            return $wikis;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }        
 
-    //         $stmt->execute([$data['name']]);
-//         return true;
-//     } catch (\PDOException $e) {
-//         die("Error: " . $e->getMessage());
-//     }
-// }
-
-    // public function showTag($tagID): array
-    // {
-    //     try {
-    //         // Prepare and execute the SQL query to select a tag by ID
-    //         $query = "SELECT * FROM tag WHERE tagID = ?";
-    //         $stmt = $this->db->prepare($query);
-    //         $stmt->execute([$tagID]);
-    //         return $stmt->fetch(PDO::FETCH_ASSOC);
-    //     } catch (\PDOException $e) {
-    //         die("Error: " . $e->getMessage());
-    //     }
-    // }
-
-    // public function showAllTags(): array
-    // {
-    //     try {
-    //         // Prepare and execute the SQL query to select all tags
-    //         $query = "SELECT * FROM tag";
-    //         $stmt = $this->db->query($query);
-    //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //     } catch (\PDOException $e) {
-    //         die("Error: " . $e->getMessage());
-    //     }
-    // }
-
-    // public function editTag($tagID, $data): bool
-    // {
-    //     try {
-    //         // Prepare and execute the SQL query to edit a tag by ID
-    //         $query = "UPDATE tag SET tagName = ? WHERE tagID = ?";
-    //         $stmt = $this->db->prepare($query);
-    //         $stmt->execute([$data['name'], $tagID]);
-    //         return true;
-    //     } catch (\PDOException $e) {
-    //         die("Error: " . $e->getMessage());
-    //     }
-    // }
     public function dalete($wikiID): bool
     {
         try {

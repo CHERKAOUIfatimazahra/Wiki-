@@ -2,6 +2,8 @@
 
 use App\Controller\AuthController;
 use App\Controller\CategoryController;
+use App\Controller\SearchController;
+use App\Controller\SinglpageController;
 use App\Controller\UserController;
 use App\Controller\HomeController;
 use App\Router;
@@ -20,16 +22,15 @@ $router->get('/logout', AuthController::class, 'logout');
 
 // Home page
 $router->get('/', HomeController::class, 'index');
+$router->post('/search', SearchController::class, 'index');
 
 // Dashboard
 if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 1)) {
+
     $router->get('/dashboard/wiki', WikiController::class, 'index');
     $router->get('/wiki/update', WikiController::class, 'findbyId');
 
-
-
     $router->get('/dashboard/tag', TagController::class, 'index');
-    // $router->get('/dashboard/category', CategoryController::class, 'index');
 
     // users routes
     $router->get('/dashboard', UserController::class, 'getAllUser');
@@ -46,7 +47,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/edit_category/:id', CategoryController::class, 'edit');
     $router->post('/update_category/:id', CategoryController::class, 'update');
     $router->post('/delete_category/:id', CategoryController::class, 'destroy');
-    
+
 
     // Tag routes
     $router->post('/add_tag', TagController::class, 'add');
@@ -55,14 +56,18 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 2 || $_SESSION['role'] == 
     $router->get('/delete_tag/:id', TagController::class, 'destroy');
 
     // Wiki routes
-    $router->get('/', WikiController::class, 'index');
     $router->post('/add_wiki', WikiController::class, 'add');
     $router->post('/edit_wiki', WikiController::class, 'update');
-    // $router->post('/update_wiki/:id', TagController::class, 'update');
     $router->post('/delete_wiki', WikiController::class, 'destroy');
+    $router->post('/wikis/published', WikiController::class, 'published');
+    $router->post('/wikis/archived', WikiController::class, 'archived');
+    $router->get('/single_page', SinglpageController::class, 'showWiki');
+   
+
 
 } else {
     $router->get('/login', AuthController::class, 'login_url');
+    $router->get('/single_page', SinglpageController::class, 'showWiki');
 }
 
 $router->dispatch();

@@ -13,7 +13,6 @@ class TagController extends Controller
         $tags = $tag->showAllTags();
         $this->render('/dashboard/tag', ['tags' => $tags]);
     }
-
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,45 +25,32 @@ class TagController extends Controller
             $tag->addTag($data);
 
             header("Refresh:0; url=dashboard/tag");
-        } else {
-            // error message
         }
     }
 
-    public function edit($id): void
+    public function edit($tagID): void
     {
         $tag = new Tag();
-        $tagData = $tag->showTag($id);
-
-        if (!$tagData) {
-            // error message
-            return;
-        }
+        $tagData = $tag->showTag($tagID);
 
         $this->render('dashboard/edit_tag', ['tag' => $tagData]);
     }
-
-    public function update($id): void
+    public function update($tagID): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $tagName = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
-            $tagID = isset($_POST["tagID"]) ? $_POST["tagID"] : "";
-            $data = [$tagName, $tagID];
+            $name = isset($_POST["tagName"]) ? $_POST["tagName"] : "";
 
-            $tag = new Tag();
-            $tag->editTag($id, $data);
-
-            header("Refresh:0; url=dashboard/tag");
-        } else {
-            // error message
+            $tagName = new Tag();
+            $tagName->editTag($tagID, ['tagName' => $name]);
+            header("Location: " . $_SERVER["HTTP_REFERER"]);
         }
     }
-
     public function destroy($id): void
     {
+
         $tag = new Tag();
         $tag->deleteTag($id);
 
-        header("Refresh:0; url=dashboard/tag");
+        header("Location: " . $_SERVER['HTTP_REFERER']);
     }
 }

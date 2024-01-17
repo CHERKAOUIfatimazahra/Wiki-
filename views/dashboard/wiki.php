@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - codingnepalweb.com -->
 <html lang="en">
 
 <head>
@@ -7,10 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!----======== CSS ======== -->
     <link rel="stylesheet" href="/assets/styles/dashboard.css">
 
-    <!----===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -30,11 +27,7 @@
     <section class="dashboard">
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
-            <div class="search-box">
-                <i class="uil uil-search"></i>
-                <input type="text" placeholder="Search here...">
-            </div>
-            <!-- <img src="images/profile.jpg" alt=""> -->
+           
         </div>
 
         <div class="dash-content">
@@ -83,12 +76,6 @@
                                         echo "<option value='{$tag['tagID']}'>{$tag['tagName']}</option>";
                                     } ?>
                                 </select>
-                            </div>
-
-                            <div class="form-outline mb-2">
-                                <label class="form-label" for="formName">creat date</label>
-                                <input type="date" id="creationDate" name="creationDate"
-                                    class="form-control form-control-lg">
                             </div>
 
                         </div>
@@ -140,13 +127,7 @@
                                     } ?>
                                 </select>
                             </div>
-
-                            <div class="form-outline mb-2">
-                                <label class="form-label" for="formName">creat date</label>
-                                <input type="date" id="Update_creationDate" name="creationDate"
-                                    class="form-control form-control-lg">
-                            </div>
-
+                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -186,20 +167,21 @@
 
             <!-- html + php -->
             <table id="example" class="table table-striped" style="width:100%">
-                <thead>
-
-                    <tr class="table table-dark">
-                        <th>wiki</th>
-                        <th>content</th>
-                        <th>category</th>
-                        <th>tags</th>
-                        <th>cration date</th>
-                        <th>status</th>
-                        <th>option</th>
-                    </tr>
-                </thead>
-
-                <tbody>
+    <thead>
+        <tr class="table table-dark">
+            <th>wiki</th>
+            <th>content</th>
+            <th>category</th>
+            <th>tags</th>
+            <th>creation date</th>
+            <?php if ($_SESSION['role'] == 1): ?>
+                
+                <th>status</th>
+            <?php endif; ?>
+            <th>option</th>
+        </tr>
+    </thead>
+    <tbody>
                 <?php foreach ($wikis as $wiki): ?>
     <tr>
         <td><?= $wiki['title'] ?></td>
@@ -207,21 +189,35 @@
         <td><?= $wiki['categoryName'] ?></td>
         <td><?= $wiki['tags'] ?></td>
         <td><?= $wiki['creationDate'] ?></td>
-        <td>
-            <form method="post" action="/edit_wiki/<?= $wiki['wikiID'] ?>">
-            <select name="status" class="form-select" id="statusSelect<?= $wiki['wikiID'] ?>" data-wikiId="<?= $wiki['wikiID'] ?>">
-                <option style="background-color: #ffeeba;" value="Draft" <?= ($wiki['status'] === 'Draft') ? 'selected' : '' ?>>Draft</option>
-                <option style="background-color: #d4edda;" value="Published" <?= ($wiki['status'] === 'Published') ? 'selected' : '' ?>>Published</option>
-                <option style="background-color: #f8d7da;" value="Archived" <?= ($wiki['status'] === 'Archived') ? 'selected' : '' ?>>Archived</option>
-            </select>
-            </form>
-        </td>
-        <td>
-            <button data-wikiId="<?= $wiki['wikiID'] ?>" class="btn btn-warning btn-sm updateId">Edit</button>
-            <button data-wikiId="<?= $wiki['wikiID'] ?>" class="btn btn-danger btn-sm deleteWiki" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $wiki['wikiID'] ?>">Delete</button>
-        </td>
+
+        <?php if ($_SESSION['role'] == 1): ?>
+            
+            <td>
+                <form method="post" action="/wikis/Published">
+                    <input type="hidden" name="id" value="<?= $wiki['wikiID'] ?>">
+                    <button type="submit" class="<?= ($wiki['status'] === 'Published') ? 'd-none' : '' ?>" style="background-color: #d4edda;" <?= ($wiki['status'] === 'Published') ? 'disabled' : '' ?>>Published</button>
+                </form>
+                <form method="post" action="/wikis/Archived">
+                    <input type="hidden" name="id" value="<?= $wiki['wikiID'] ?>">
+                    <button type="submit" class="<?= ($wiki['status'] === 'Archived') ? 'd-none' : '' ?>" style="background-color: #f8d7da;" <?= ($wiki['status'] === 'Archived') ? 'disabled' : '' ?>>Archived</button>
+                </form>
+                <span><?= $wiki['status'] ?></span>
+            </td>
+        <?php endif; ?>
+
+        <?php if ($_SESSION['role'] == 2): ?>
+            <td>
+                <!-- <button data-wikiId="<?= $wiki['wikiID'] ?>" class="btn btn-warning btn-sm updateId">Edit</button> -->
+                <button data-wikiId="<?= $wiki['wikiID'] ?>" class="btn btn-danger btn-sm deleteWiki" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $wiki['wikiID'] ?>">Delete</button>
+            </td>
+        <?php endif; ?>
+        <?php if ($_SESSION['role'] == 1): ?>
+            <td>
+                <button data-wikiId="<?= $wiki['wikiID'] ?>" class="btn btn-danger btn-sm deleteWiki" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $wiki['wikiID'] ?>">Delete</button>
+            </td>
+        <?php endif; ?>
     </tr>
-<?php endforeach ?>
+<?php endforeach; ?>
                     
                    
                 </tbody>
@@ -255,14 +251,22 @@
         url: `/wiki/update`, // Replace with the actual URL to your server-side handler
         data: { wikiID: wikiID },
         success: function(data) {
-            $('#Update_title').val(data.title)
-            $('#Update_content').val(data.content)
-            $('#wikiID').val(data.wikiID)
-            $('#Update_categoryID').val(data.categoryID);
-            $('#Update_creationDate').val(data.creationDate);
-            
+          // Check if the user is an admin and is not the owner of the wiki
+          if (data.userRole !== 1 && data.userId !== data.wikiOwnerId) {
+            // If not an admin or the owner, hide the edit button
+            $('#editWikiBtn').hide();
+          } else {
+            $('#editWikiBtn').show();
+          }
 
+          // Populate the modal fields with wiki data
+          $('#Update_title').val(data.title)
+          $('#Update_content').val(data.content)
+          $('#wikiID').val(data.wikiID)
+          $('#Update_categoryID').val(data.categoryID);
+          $('#Update_creationDate').val(data.creationDate);
 
+          // Show the edit modal
           $('#editModal').modal('show');
         },
         error: function(xhr, status, error) {
@@ -279,10 +283,8 @@
         url: `/wiki/update`, // Replace with the actual URL to your server-side handler
         data: { wikiID: wikiID },
         success: function(data) {
-            console.log(data)
-            $('#wikiIDDeletye').val(data.wikiID)
-            
-
+          console.log(data)
+          $('#wikiIDDeletye').val(data.wikiID)
 
           $('#deleteModal').modal('show');
         },

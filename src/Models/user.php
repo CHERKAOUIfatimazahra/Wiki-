@@ -13,6 +13,12 @@ class User
         $this->db = Database::getInstance()->getConnection();
     }
 
+    function getStatistic(){
+           
+            return $this->db->query("SELECT(SELECT COUNT(*)  FROM  users) as userCOUNT ,(SELECT COUNT(*)  FROM  tag) as tagCOUNT
+            ,(SELECT COUNT(*)  FROM  wiki) as wikiCOUNT,(SELECT COUNT(*)  FROM  category) as categoryCOUNT")->fetch();
+    }
+
     public function showAll()
     {
         try {
@@ -25,15 +31,18 @@ class User
 
             return $users;
         } catch (\PDOException $e) {
-            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
 
     public function create($data)
     {
+        $hashedPassword = password_hash($data[2], PASSWORD_DEFAULT);
+        $data[2] = $hashedPassword;
+
         $stmt = $this->db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
         $stmt->execute($data);
+
         return $stmt;
     }
 
@@ -45,12 +54,10 @@ class User
             $statement = $this->db->prepare($query);
             $statement->execute([$id]);
 
-            // Fetch the user as an associative array
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
             return $user;
         } catch (\PDOException $e) {
-            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
@@ -66,16 +73,12 @@ class User
 
             return $statement;
         } catch (\PDOException $e) {
-            // Handle the exception
             die("Error: " . $e->getMessage());
         }
     }
 
     public function delete($id)
     {
-
-
-        // dump($id['id']);die();
         try {
             $step = $this->db->prepare("DELETE FROM users WHERE id=:id");
             $step->bindParam(":id", $id['id'], PDO::PARAM_INT);
@@ -83,32 +86,16 @@ class User
 
             if ($step->execute()) {
                 return $step;
-                // echo $step->rowCount() . ' row(s) was deleted successfully.';
             }
 
         } catch (\PDOException $e) {
-            // Handle the exception
             die("Error: " . $e->getMessage());
         }
-        // connect to the database and select the publisher
-
-        // $user_id = $id ;
-
-        // $sql = 'DELETE FROM users WHERE id = :id';
-
-
-        // $statement = $this->db->prepare($sql);
-        // $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
-
-        // if ($statement->execute()) {
-        //     echo $statement->rowCount() . ' row(s) was deleted successfully.';
-        // }
     }
 
     // login , register and logout
     public function login($email, $password)
     {
-
         $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
 
         $stmt->bindValue(1, $email);
@@ -133,7 +120,6 @@ class User
         $stmt->bindValue(3, $passhash);
         $stmt->bindValue(4, $role);
 
-
         $result = $stmt->execute();
 
         if ($result) {
@@ -142,17 +128,5 @@ class User
 
         return false;
     }
-    public function getCount(): int
-    {
-        try {
-            // Prepare and execute the SQL query to get the count of users
-            $query = "SELECT COUNT(*) as count FROM users";
-            $stmt = $this->db->query($query);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $result['count'] ?? 0;
-        } catch (\PDOException $e) {
-            die("Error: " . $e->getMessage());
-        }
-    }
+    
 }

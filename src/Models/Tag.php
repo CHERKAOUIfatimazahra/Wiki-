@@ -17,37 +17,36 @@ class Tag
     }
 
     public function getTagID(): int
-        {
-            return $this->tagID;
-        }
-    
-        public function setTagID(int $tagID)
-        {
-            $this->tagID = $tagID;
-        }
-    
-        public function getTagName(): string
-        {
-            return $this->tagName;
-        }
-    
-        public function setTagName(string $tagName)
-        {
-            $this->tagName = $tagName;
-        }
-    public function addTag($data): bool
-{
-    try { 
-        // Prepare and execute the SQL query to add a tag
-        $query = "INSERT INTO tag (tagName) VALUES (?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([$data['name']]);
-        return true;
-    } catch (\PDOException $e) {
-        die("Error: " . $e->getMessage());
+    {
+        return $this->tagID;
     }
-}
 
+    public function setTagID(int $tagID)
+    {
+        $this->tagID = $tagID;
+    }
+
+    public function getTagName(): string
+    {
+        return $this->tagName;
+    }
+
+    public function setTagName(string $tagName)
+    {
+        $this->tagName = $tagName;
+    }
+    public function addTag($data): bool
+    {
+        try {
+            // Prepare and execute the SQL query to add a tag
+            $query = "INSERT INTO tag (tagName) VALUES (?)";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$data['name']]);
+            return true;
+        } catch (\PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
     public function showTag($tagID): array
     {
         try {
@@ -60,7 +59,6 @@ class Tag
             die("Error: " . $e->getMessage());
         }
     }
-
     public function showAllTags(): array
     {
         try {
@@ -72,14 +70,14 @@ class Tag
             die("Error: " . $e->getMessage());
         }
     }
-
     public function editTag($tagID, $data): bool
     {
+
+        $name = $_POST["tagName"];
         try {
-            // Prepare and execute the SQL query to edit a tag by ID
             $query = "UPDATE tag SET tagName = ? WHERE tagID = ?";
             $stmt = $this->db->prepare($query);
-            $stmt->execute([$data['name'], $tagID]);
+            $stmt->execute([$name, $tagID["id"]]);
             return true;
         } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());
@@ -89,23 +87,12 @@ class Tag
     {
         try {
             // Prepare and execute the SQL query to delete a tag by ID
-            $query = "DELETE FROM tag WHERE tagID = ?";
+            $tagID = $tagID["id"];
+            $query = "DELETE FROM tag WHERE tagID = :id ";
             $stmt = $this->db->prepare($query);
-            $stmt->execute([$tagID]);
-            return true;
-        } catch (\PDOException $e) {
-            die("Error: " . $e->getMessage());
-        }
-    }
-    public function getCount(): int
-    {
-        try {
-            // Prepare and execute the SQL query to get the count of tags
-            $query = "SELECT COUNT(*) as count FROM tag";
-            $stmt = $this->db->query($query);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->bindParam(":id", $tagID);
+            return $stmt->execute();
 
-            return $result['count'] ?? 0;
         } catch (\PDOException $e) {
             die("Error: " . $e->getMessage());
         }
